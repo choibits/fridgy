@@ -37,10 +37,10 @@ public class Profile {
     @Column(nullable = false, length = 100)
     private String lastName;
 
-    // optional favorite foods field
+    // optional goal field
     @Size(max=200)
     @Column(length = 200)
-    private String favoriteFoods;
+    private String goal;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)

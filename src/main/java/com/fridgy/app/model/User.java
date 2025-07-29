@@ -12,6 +12,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -29,6 +30,14 @@ public class User {
 
     @OneToOne(mappedBy="user", cascade = CascadeType.REMOVE)
     private Profile profile;
+
+    // we could take this relationship out if we wanted to because if we did have many grocery lists
+    // we might not always want to return all the grocery lists everytime we fetch a user
+    @OneToMany
+    private List<GroceryList> groceryLists;
+
+    @ManyToMany(mappedBy = "users")
+    private List<Refrigerator> refrigerators;
 
     @Column(nullable = false, length = 100, unique = true)
     private String email;
