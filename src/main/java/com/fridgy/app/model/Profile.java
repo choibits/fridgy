@@ -1,7 +1,6 @@
 package com.fridgy.app.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -12,29 +11,36 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.OffsetDateTime;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
-//keyword user is reserved in postgres so you need to rename the table
-@Table(name = "users")
-public class User {
-
+public class Profile {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
-    // UUIDs look like this: 123e4567-e89b-12d3-a456-426614174000
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
-    @OneToOne(mappedBy="user", cascade = CascadeType.REMOVE)
-    private Profile profile;
+    @OneToOne
+    @JoinColumn(name="user_id", nullable = false) // even if we don't provide this hibernate will provide
+    private User user;
 
-    @Column(nullable = false, length = 100, unique = true)
-    private String email;
-
+    @NotBlank
+    @Size(min=1, max=100)
     @Column(nullable = false, length = 100)
-    private String passwordHash;
+    private String firstName;
+
+    @NotBlank
+    @Size(min=1, max=100)
+    @Column(nullable = false, length = 100)
+    private String lastName;
+
+    // optional favorite foods field
+    @Size(max=200)
+    @Column(length = 200)
+    private String favoriteFoods;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
@@ -43,5 +49,4 @@ public class User {
     @UpdateTimestamp
     @Column(nullable = false)
     private OffsetDateTime updatedAt;
-
 }
