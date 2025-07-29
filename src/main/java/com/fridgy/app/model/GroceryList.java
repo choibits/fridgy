@@ -37,8 +37,6 @@ public class GroceryList {
     private List<Item> items;
 
     @Column(nullable = false, unique = true, length = 100)
-    @NotBlank
-    @Size(min=1, max=100)
     private String listName;
 
 }

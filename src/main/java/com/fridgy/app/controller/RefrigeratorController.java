@@ -67,29 +67,29 @@ public class RefrigeratorController {
         refrigeratorService.deleteRefrigerator(id);
     }
 
-    // ==== ITEMS ====
-    @GetMapping
-    public ResponseEntity<List<ItemResponseDto>> getItemsInFridge(@PathVariable Long fridgeId) {
-        return ResponseEntity.ok(itemService.getItems(fridgeId));
-    }
-
-    @PostMapping
-    public ResponseEntity<ItemResponseDto> addItemToFridge(@PathVariable Long fridgeId,
-                                                           @Valid @RequestBody ItemRequestDto itemDto) {
-        return ResponseEntity.ok(itemService.addItemToFridge(fridgeId, itemDto));
-    }
-
-    @PutMapping("/{itemId}")
-    public ResponseEntity<ItemResponseDto> updateItemInFridge(@PathVariable Long fridgeId,
-                                                              @PathVariable Long itemId,
-                                                              @Valid @RequestBody ItemRequestDto itemDto) {
-        return ResponseEntity.ok(itemService.updateItemInFridge(fridgeId, itemId, itemDto));
-    }
-
-    @DeleteMapping("/{itemId}")
-    public ResponseEntity<Void> deleteItemFromFridge(@PathVariable Long fridgeId,
-                                                     @PathVariable Long itemId) {
-        itemService.deleteItemFromFridge(fridgeId, itemId);
-        return ResponseEntity.noContent().build();
-    }
+//    // ==== ITEMS ====
+//    @GetMapping
+//    public ResponseEntity<List<ItemResponseDto>> getItemsInFridge(@PathVariable Long fridgeId) {
+//        return ResponseEntity.ok(itemService.getItems(fridgeId));
+//    }
+//
+//    @PostMapping
+//    public ResponseEntity<ItemResponseDto> addItemToFridge(@PathVariable Long fridgeId,
+//                                                           @Valid @RequestBody ItemRequestDto itemDto) {
+//        return ResponseEntity.ok(itemService.addItemToFridge(fridgeId, itemDto));
+//    }
+//
+//    @PutMapping("/{itemId}")
+//    public ResponseEntity<ItemResponseDto> updateItemInFridge(@PathVariable Long fridgeId,
+//                                                              @PathVariable Long itemId,
+//                                                              @Valid @RequestBody ItemRequestDto itemDto) {
+//        return ResponseEntity.ok(itemService.updateItemInFridge(fridgeId, itemId, itemDto));
+//    }
+//
+//    @DeleteMapping("/{itemId}")
+//    public ResponseEntity<Void> deleteItemFromFridge(@PathVariable Long fridgeId,
+//                                                     @PathVariable Long itemId) {
+//        itemService.deleteItemFromFridge(fridgeId, itemId);
+//        return ResponseEntity.noContent().build();
+//    }
 }
