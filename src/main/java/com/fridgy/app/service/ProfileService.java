@@ -2,6 +2,7 @@ package com.fridgy.app.service;
 
 import com.fridgy.app.dto.ProfileRequestDto;
 import com.fridgy.app.dto.ProfileResponseDto;
+import com.fridgy.app.exception.ResourceNotFoundException;
 import com.fridgy.app.model.Profile;
 import com.fridgy.app.model.User;
 import com.fridgy.app.repository.ProfileRepository;
@@ -24,7 +25,7 @@ public class ProfileService implements IProfileService {
 
     @Override
     public ProfileResponseDto createProfile(Long userId, ProfileRequestDto requestDto) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
         if (user.getProfile() != null) {
             throw new RuntimeException("User already has a profile.");
         }
@@ -44,7 +45,7 @@ public class ProfileService implements IProfileService {
 
     @Override
     public ProfileResponseDto getProfileByUserId(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
         if (user.getProfile() == null) {
             throw new RuntimeException("User does not have a profile.");
         }
@@ -53,7 +54,7 @@ public class ProfileService implements IProfileService {
 
     @Override
     public ProfileResponseDto updateProfileByUserId(Long userId, ProfileRequestDto requestDto) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
         if (user.getProfile() == null) {
             throw new RuntimeException("User does not have a profile to update. Create a profile first.");
         }

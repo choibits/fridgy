@@ -57,4 +57,15 @@ public class GlobalExceptionHandler {
                 .build();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorDto);
     }
+
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE) // 406
+    public ResponseEntity<ErrorDto> handleRuntimeException(Exception ex) {
+        ErrorDto errorDto = ErrorDto.builder()
+                .status(HttpStatus.NOT_ACCEPTABLE.value())
+                .error(HttpStatus.NOT_ACCEPTABLE.getReasonPhrase())
+                .message(ex.getMessage())
+                .build();
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(errorDto);
+    }
 }
