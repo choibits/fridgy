@@ -23,4 +23,21 @@ public class ProfileController {
         ProfileResponseDto responseDto = profileService.createProfile(userId, requestDto);
         return ResponseEntity.ok(responseDto);
     }
+
+    @GetMapping
+    public ResponseEntity<ProfileResponseDto> getProfileByUserId(
+            @PathVariable Long userId
+    ) {
+        ProfileResponseDto responseDto = profileService.getProfileByUserId(userId);
+        return ResponseEntity.ok(responseDto);
+    }
+
+    @PutMapping
+    public ResponseEntity<ProfileResponseDto> updateProfileByUserId(
+            @PathVariable Long userId,
+            @RequestBody @Valid ProfileRequestDto requestDto
+    ) {
+        ProfileResponseDto responseDto = profileService.updateProfileByUserId(userId, requestDto);
+        return ResponseEntity.accepted().body(responseDto);
+    }
 }

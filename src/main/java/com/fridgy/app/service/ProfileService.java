@@ -45,18 +45,23 @@ public class ProfileService implements IProfileService {
     @Override
     public ProfileResponseDto getProfileByUserId(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-        return null;
+        if (user.getProfile() == null) {
+            throw new RuntimeException("User does not have a profile.");
+        }
+        return modelMapper.map(user.getProfile(), ProfileResponseDto.class);
     }
 
     @Override
     public ProfileResponseDto updateProfileByUserId(Long userId, ProfileRequestDto requestDto) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        if (user.getProfile() == null) {
+            throw new RuntimeException("User does not have a profile to update. Create a profile first.");
+        }
 
-        return null;
+        Profile currentProfile = user.getProfile();
+        modelMapper.map(requestDto, currentProfile); // map over the current profile with the new requestDto
+        Profile savedProfile = profileRepository.save(currentProfile);
+        return modelMapper.map(savedProfile, ProfileResponseDto.class);
     }
 
-    @Override
-    public void deleteProfile(Long userId) {
-
-    }
 }
