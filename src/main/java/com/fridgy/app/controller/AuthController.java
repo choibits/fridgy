@@ -22,4 +22,11 @@ public class AuthController {
         AuthResponseDto responseDto = authService.signup(requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponseDto> login(@Valid @RequestBody AuthRequestDto requestDto) {
+        AuthResponseDto responseDto = authService.login(requestDto);
+        return ResponseEntity.ok().body(responseDto);
+    }
+
 }

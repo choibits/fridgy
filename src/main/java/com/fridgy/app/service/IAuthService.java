@@ -6,4 +6,5 @@ import com.fridgy.app.model.User;
 
 public interface IAuthService {
     AuthResponseDto signup(AuthRequestDto requestDto);
+    AuthResponseDto login(AuthRequestDto requestDto);
 }

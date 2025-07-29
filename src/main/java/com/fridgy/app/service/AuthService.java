@@ -34,4 +34,18 @@ public class AuthService implements IAuthService {
                 .message("User registered successfully. Please login.")
                 .build();
     }
+
+    @Override
+    public AuthResponseDto login(AuthRequestDto requestDto) {
+        User user = userRepository.findByEmail(requestDto.getEmail()).orElseThrow(() -> new RuntimeException("Invalid email or password."));
+        if (!passwordEncoder.matches(requestDto.getPassword(), user.getPasswordHash())) {
+            throw new RuntimeException("Invalid email or password.");
+        }
+        return AuthResponseDto.builder()
+                .success(true)
+                .message("Login successful.")
+                .id(user.getId())
+                .email(user.getEmail())
+                .build();
+    }
 }
