@@ -6,6 +6,7 @@ import com.fridgy.app.model.Profile;
 import com.fridgy.app.model.User;
 import com.fridgy.app.repository.ProfileRepository;
 import com.fridgy.app.repository.UserRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +14,13 @@ import org.springframework.stereotype.Service;
 public class ProfileService implements IProfileService {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    ProfileRepository profileRepository;
+    private ProfileRepository profileRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Override
     public ProfileResponseDto createProfile(Long userId, ProfileRequestDto requestDto) {
@@ -24,15 +28,18 @@ public class ProfileService implements IProfileService {
         if (user.getProfile() != null) {
             throw new RuntimeException("User already has a profile.");
         }
-        Profile profile = Profile.builder()
-                .firstName(requestDto.getFirstName())
-                .lastName(requestDto.getLastName())
-                .favoriteFoods(requestDto.getFavoriteFoods())
-                .build();
+
+//        Profile profile = Profile.builder()
+//                .firstName(requestDto.getFirstName())
+//                .lastName(requestDto.getLastName())
+//                .favoriteFoods(requestDto.getFavoriteFoods())
+//                .build();
+
+        Profile profile = modelMapper.map(requestDto, Profile.class);
 
         profile.setUser(user); // need to set the user field by the userId you get passed in
         Profile savedProfile = profileRepository.save(profile);
-        return null;
+        return modelMapper.map(savedProfile, ProfileResponseDto.class);
     }
 
     @Override

@@ -12,10 +12,10 @@ import org.springframework.stereotype.Service;
 public class AuthService implements IAuthService {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public AuthResponseDto signup(AuthRequestDto requestDto) {
