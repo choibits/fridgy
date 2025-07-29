@@ -10,7 +10,7 @@ import java.util.List;
 public interface IRefrigeratorService {
     RefrigeratorResponseDto createRefrigerator(RefrigeratorRequestDto requestDto);
     RefrigeratorResponseDto getRefrigeratorById(Long id);
-    List<RefrigeratorResponseDto> getAllRefrigerators(Long userId);
+//    List<RefrigeratorResponseDto> getAllRefrigerators(Long userId);
     RefrigeratorResponseDto updateRefrigerator(Long id, RefrigeratorRequestDto requestDto);
     RefrigeratorResponseDto addUserToFridgeByEmail(Long fridgeId, String email);
     RefrigeratorResponseDto removeUserFromFridgeByEmail(Long fridgeId, String email);

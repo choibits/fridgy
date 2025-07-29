@@ -33,11 +33,12 @@ public class RefrigeratorController {
         return refrigeratorService.getRefrigeratorById(id);
     }
 
-    @GetMapping("/user/{userId}")
-    public List<RefrigeratorResponseDto> getAllRefrigeratorsForUser(
-            @PathVariable Long userId) {
-        return refrigeratorService.getAllRefrigerators(userId);
-    }
+    // TODO: Implement this endpoint
+//    @GetMapping("/user/{userId}")
+//    public List<RefrigeratorResponseDto> getAllRefrigeratorsForUser(
+//            @PathVariable Long userId) {
+//        return refrigeratorService.getAllRefrigerators(userId);
+//    }
 
     @PutMapping("/{id}")
     public RefrigeratorResponseDto updateRefrigerator(
