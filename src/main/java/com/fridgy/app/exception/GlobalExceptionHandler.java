@@ -5,6 +5,7 @@ import com.fridgy.app.dto.ErrorDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -16,6 +17,16 @@ import java.util.Map;
 // response entity exception handler has its own implementation of other exception handling mechanisms, so by extending it, we can use its methods
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    // error for if you don't provide a request parameter
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<ErrorDto> handleMissingServletRequestParameterException(MissingServletRequestParameterException ex) {
+        ErrorDto errorDto = ErrorDto.builder()
+                .status(HttpStatus.BAD_REQUEST.value())
+                .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                .message(ex.getMessage())
+                .build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDto);
+    }
 
     @ExceptionHandler(ResourceNotFoundException.class) // tells springboot its for the ResourceNotFoundException class
     @ResponseStatus(HttpStatus.NOT_FOUND)

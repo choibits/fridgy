@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/grocerylists")
+@CrossOrigin("*")
 public class GroceryListController {
     @Autowired
     private GroceryListService groceryListService;

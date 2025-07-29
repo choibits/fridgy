@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users/{userId}/profile") // all profiles are under a specific user
+@CrossOrigin("*")
 public class ProfileController {
 
     @Autowired

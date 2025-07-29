@@ -15,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/refrigerators")
+@CrossOrigin("*")
 public class RefrigeratorController {
 
     @Autowired
