@@ -31,12 +31,13 @@ public class Item {
     @Column(nullable = false, length = 100)
     private String itemName;
 
-    @Column(nullable = false)
+    @Column(nullable = false) // isBought always starts as false?
     private boolean isBought;
 
     @Column(nullable = false)
     private int quantity;
 
+    @Column
     private String imageUrl;
 
     @Column(nullable = false)
