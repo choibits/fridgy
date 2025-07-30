@@ -30,12 +30,16 @@ public class JwtInterceptor implements HandlerInterceptor {
         // eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNzUzODQzNjIxLCJleHAiOjE3NTM5MzAwMjF9.v5V-ShgL0pnwyNvUk3v6-VuaKIHAgeKWzOU2TnkHcJs
 
         // validate the token
-        // if the token is valid, allow the request to proceed
+        // if the token is invalid, return a 401 Unauthorized response
         if (!jwtService.isTokenValid(token)) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid or expired token");
             return false;
         }
-        // if the token is invalid, return a 401 Unauthorized response
+        // if the token is valid, allow the request to proceed
+
+        //get the user id from the token to send back to any requests
+        request.setAttribute("userId", jwtService.getUserId(token));
+
         return true;
     }
 }

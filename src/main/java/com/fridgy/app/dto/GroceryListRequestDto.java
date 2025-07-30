@@ -13,8 +13,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class GroceryListRequestDto {
-    @NotNull
-    private Long userId;
+
+    // Removed userId as an input because now you get it from the JWT token
+    //    @NotNull
+    //    private Long userId;
 
     @NotBlank
     @Size(min=1, max=100)

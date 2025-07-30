@@ -3,6 +3,8 @@ package com.fridgy.app.controller;
 import com.fridgy.app.dto.GroceryListRequestDto;
 import com.fridgy.app.dto.GroceryListResponseDto;
 import com.fridgy.app.service.GroceryListService;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,8 +21,9 @@ public class GroceryListController {
     private GroceryListService groceryListService;
 
     @PostMapping
-    ResponseEntity<GroceryListResponseDto> createGroceryList(@Valid @RequestBody GroceryListRequestDto requestDto) {
-        GroceryListResponseDto responseDto = groceryListService.createGroceryList(requestDto);
+    ResponseEntity<GroceryListResponseDto> createGroceryList(HttpServletRequest request, @Valid @RequestBody GroceryListRequestDto requestDto) {
+        Long userId = (Long) request.getAttribute("userId");
+        GroceryListResponseDto responseDto = groceryListService.createGroceryList(userId, requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
@@ -35,15 +38,19 @@ public class GroceryListController {
     }
 
     @PutMapping("/{groceryListId}")
-    ResponseEntity<GroceryListResponseDto> updateGroceryList(@PathVariable Long groceryListId, @Valid @RequestBody GroceryListRequestDto requestDto) {
-        return ResponseEntity.accepted().body(groceryListService.updateGroceryList(groceryListId, requestDto));
+    ResponseEntity<GroceryListResponseDto> updateGroceryList(HttpServletRequest request, @PathVariable Long groceryListId,
+                                                             @Valid @RequestBody GroceryListRequestDto requestDto) {
+        Long userId = (Long) request.getAttribute("userId");
+        return ResponseEntity.accepted().body(groceryListService.updateGroceryList(userId, groceryListId, requestDto));
     }
 
     @DeleteMapping("/{groceryListId}")
-    ResponseEntity<Void> deleteGroceryList(@PathVariable Long groceryListId) {
-        groceryListService.deleteGroceryList(groceryListId);
+    ResponseEntity<Void> deleteGroceryList(HttpServletRequest request, @PathVariable Long groceryListId) {
+        Long userId = (Long) request.getAttribute("userId");
+        groceryListService.deleteGroceryList(userId, groceryListId);
         return ResponseEntity.noContent().build();
     }
 
+    // TODO: addItemToGroceryList and removeItemFromGroceryList - both of these will need the userId or HttpServletRequest
 
 }

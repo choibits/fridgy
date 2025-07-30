@@ -7,6 +7,7 @@ import com.fridgy.app.model.GroceryList;
 import com.fridgy.app.model.User;
 import com.fridgy.app.repository.GroceryListRepository;
 import com.fridgy.app.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,9 +27,9 @@ public class GroceryListService implements IGroceryListService {
     private UserRepository userRepository;
 
     @Override
-    public GroceryListResponseDto createGroceryList(GroceryListRequestDto requestDto) {
+    public GroceryListResponseDto createGroceryList(Long userId, GroceryListRequestDto requestDto) {
         // Check if user exists
-        User user = userRepository.findById(requestDto.getUserId()).orElseThrow(() -> new ResourceNotFoundException("User", "id", requestDto.getUserId()));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
 
         GroceryList groceryList = modelMapper.map(requestDto, GroceryList.class);
         groceryList.setUser(user);
@@ -38,21 +39,36 @@ public class GroceryListService implements IGroceryListService {
 
     @Override
     public GroceryListResponseDto getGroceryList(Long groceryListId) {
-        return null;
+        GroceryList groceryList = groceryListRepository.findById(groceryListId).orElseThrow(() -> new ResourceNotFoundException("GroceryList", "id", groceryListId));
+        return modelMapper.map(groceryList, GroceryListResponseDto.class);
     }
 
     @Override
     public List<GroceryListResponseDto> getAllGroceryListsByUserId(Long userId) {
-        return List.of();
+        userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+        List<GroceryList> groceryLists = groceryListRepository.findAllByUserId(userId);
+        return groceryLists.stream().map(groceryList -> modelMapper.map(groceryList, GroceryListResponseDto.class)).toList();
     }
 
     @Override
-    public GroceryListResponseDto updateGroceryList(Long groceryListId, GroceryListRequestDto requestDto) {
-        return null;
+    public GroceryListResponseDto updateGroceryList(Long userId, Long groceryListId, GroceryListRequestDto requestDto) {
+        GroceryList groceryList = groceryListRepository.findById(groceryListId).orElseThrow(() -> new ResourceNotFoundException("GroceryList", "id", groceryListId));
+        userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+        if (groceryList.getUser().getId() != userId) {
+            throw new RuntimeException("The grocery list belongs to another user. Can't update it.");
+        }
+        modelMapper.map(requestDto, groceryList);
+        GroceryList updatedGroceryList = groceryListRepository.save(groceryList);
+        return modelMapper.map(updatedGroceryList, GroceryListResponseDto.class);
     }
 
     @Override
-    public void deleteGroceryList(Long groceryListId) {
-
+    public void deleteGroceryList(Long userId, Long groceryListId) {
+        GroceryList groceryList = groceryListRepository.findById(groceryListId).orElseThrow(() -> new ResourceNotFoundException("GroceryList", "id", groceryListId));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+        if (groceryList.getUser().getId() != userId) {
+            throw new RuntimeException("The grocery list belongs to another user. Can't delete it.");
+        }
+        groceryListRepository.delete(groceryList);
     }
 }
