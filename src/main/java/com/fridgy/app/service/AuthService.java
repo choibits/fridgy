@@ -18,10 +18,13 @@ public class AuthService implements IAuthService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private JwtService jwtService;
+
     @Override
     public AuthResponseDto signup(AuthRequestDto requestDto) {
         if (userRepository.findByEmail(requestDto.getEmail()).isPresent()) {
-            throw new ResourceNotFoundException("User", "Email", requestDto.getEmail());
+            throw new RuntimeException("User already exists with email: " + requestDto.getEmail());
         }
         String hashedPassword = passwordEncoder.encode(requestDto.getPassword());
         User user = User.builder()
@@ -42,11 +45,15 @@ public class AuthService implements IAuthService {
         if (!passwordEncoder.matches(requestDto.getPassword(), user.getPasswordHash())) {
             throw new RuntimeException("Invalid Email or Password");
         }
+
+        String token = jwtService.generateToken(user.getId());
+
         return AuthResponseDto.builder()
                 .success(true)
                 .message("Login successful.")
                 .id(user.getId())
                 .email(user.getEmail())
+                .token(token)
                 .build();
     }
 }
