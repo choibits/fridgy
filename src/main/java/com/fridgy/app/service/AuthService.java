@@ -36,6 +36,7 @@ public class AuthService implements IAuthService {
         return AuthResponseDto.builder()
                 .success(true)
                 .message("User registered successfully. Please login.")
+                .id(user.getId())
                 .build();
     }
 
