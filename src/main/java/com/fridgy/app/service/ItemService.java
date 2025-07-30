@@ -6,9 +6,11 @@ import com.fridgy.app.exception.ResourceNotFoundException;
 import com.fridgy.app.model.GroceryList;
 import com.fridgy.app.model.Item;
 import com.fridgy.app.model.Refrigerator;
+import com.fridgy.app.model.User;
 import com.fridgy.app.repository.GroceryListRepository;
 import com.fridgy.app.repository.ItemRepository;
 import com.fridgy.app.repository.RefrigeratorRepository;
+import com.fridgy.app.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,9 @@ public class ItemService implements IItemService {
 
     @Autowired
     private RefrigeratorRepository refrigeratorRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public ItemResponseDto createItem(ItemRequestDto dto) {
@@ -51,6 +56,7 @@ public class ItemService implements IItemService {
         return items.stream().map(item -> modelMapper.map(item, ItemResponseDto.class)).toList();
     }
 
+    // TODO: revisit this note
     // Note: you would update the item in the item details page, not the grocery list page
     // NOT like: /refrigerators/items/{itemId} or grocerylists/items/{itemId}
     // item id makes it unique - you would update on items/{itemId}

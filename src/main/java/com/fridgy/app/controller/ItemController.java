@@ -3,6 +3,7 @@ package com.fridgy.app.controller;
 import com.fridgy.app.dto.ItemRequestDto;
 import com.fridgy.app.dto.ItemResponseDto;
 import com.fridgy.app.service.IItemService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -17,6 +17,8 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) { // "Add employees - employee registry"
         registry.addInterceptor(jwtInterceptor) // "Add the bodyguard"
         .addPathPatterns("/**")// tell bodyguard where to open it - which doors to cover? which path? This means every end point
-        .excludePathPatterns("/auth/signup", "/auth/login"); // But, exclude doors that look like this
+        .excludePathPatterns("/auth/signup", "/auth/login", "/items"); // But, exclude doors that look like this
+        // TODO: Excluded the items so that I could create them without authentication -
+        //  if I have time make it so only an admin@fridgy.com can create new items
     }
 }
