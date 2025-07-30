@@ -14,11 +14,11 @@ public interface IItemService {
 
     ItemResponseDto updateItemById(Long itemId, ItemRequestDto itemRequestDto);
 
-    ItemResponseDto addItemToGroceryList(Long itemId, Long groceryListId);
-
-    ItemResponseDto removeItemFromGroceryList(Long itemId, Long groceryListId);
-
-    ItemResponseDto moveItemToFridge(Long itemId, Long fridgeId);
+//    ItemResponseDto addItemToGroceryList(Long itemId, Long groceryListId);
+//
+//    ItemResponseDto removeItemFromGroceryList(Long itemId, Long groceryListId);
+//
+//    ItemResponseDto moveItemToFridge(Long itemId, Long fridgeId);
 
     void deleteItem(Long itemId);
 }

@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ItemResponseDto {
-    private Long itemId;
+    private Long id;
     private String itemName;
     private boolean isBought;
     private int quantity;

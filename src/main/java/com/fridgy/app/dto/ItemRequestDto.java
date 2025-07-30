@@ -17,7 +17,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 public class ItemRequestDto {
-
+    // TODO: Not sure if I need these ids
     private Long groceryListId;
 
     private Long refrigeratorId;

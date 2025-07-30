@@ -7,7 +7,6 @@ import com.fridgy.app.model.GroceryList;
 import com.fridgy.app.model.User;
 import com.fridgy.app.repository.GroceryListRepository;
 import com.fridgy.app.repository.UserRepository;
-import jakarta.servlet.http.HttpServletRequest;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
