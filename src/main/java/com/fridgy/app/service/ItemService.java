@@ -49,14 +49,12 @@ public class ItemService implements IItemService {
         return modelMapper.map(item, ItemResponseDto.class);
     }
 
-    // TODO: not sure if i need this one
     @Override
     public List<ItemResponseDto> getAllItems() {
         List<Item> items = itemRepository.findAll();
         return items.stream().map(item -> modelMapper.map(item, ItemResponseDto.class)).toList();
     }
 
-    // TODO: revisit this note
     // Note: you would update the item in the item details page, not the grocery list page
     // NOT like: /refrigerators/items/{itemId} or grocerylists/items/{itemId}
     // item id makes it unique - you would update on items/{itemId}

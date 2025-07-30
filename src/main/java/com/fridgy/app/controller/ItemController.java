@@ -30,7 +30,7 @@ public class ItemController {
         return ResponseEntity.ok(itemService.getItemById(id));
     }
 
-    // Not sure if I need this endpoint
+    // TODO: Not sure if I need this endpoint
     @GetMapping
     public ResponseEntity<List<ItemResponseDto>> getAllItems() {
         return ResponseEntity.ok(itemService.getAllItems());

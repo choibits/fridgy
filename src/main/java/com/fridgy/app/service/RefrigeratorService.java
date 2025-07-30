@@ -33,20 +33,18 @@ public class RefrigeratorService implements IRefrigeratorService {
     private ItemRepository itemRepository;
 
     @Override
-    public RefrigeratorResponseDto createRefrigerator(RefrigeratorRequestDto dto) {
-        // Map DTO to entity
-        Refrigerator refrigerator = new Refrigerator();
-        refrigerator.setFridgeName(dto.getFridgeName());
+    public RefrigeratorResponseDto createRefrigerator(Long userId, RefrigeratorRequestDto dto) {
+        // Check if user exists
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
 
-        // Fetch users and add to fridge
-        if (dto.getUserIds() != null && !dto.getUserIds().isEmpty()) {
-            List<User> users = userRepository.findAllById(dto.getUserIds());
-            refrigerator.setUsers(users);
-        }
+        Refrigerator refrigerator = modelMapper.map(dto, Refrigerator.class);
 
-        // Save and return response
-        Refrigerator saved = refrigeratorRepository.save(refrigerator);
-        return modelMapper.map(saved, RefrigeratorResponseDto.class);
+        List<User> users = refrigerator.getUsers();
+        users.add(user);
+        refrigerator.setUsers(users);
+
+        Refrigerator savedRefrigerator = refrigeratorRepository.save(refrigerator);
+        return modelMapper.map(savedRefrigerator, RefrigeratorResponseDto.class);
     }
 
     @Override
@@ -56,63 +54,77 @@ public class RefrigeratorService implements IRefrigeratorService {
         return modelMapper.map(refrigerator, RefrigeratorResponseDto.class);
     }
 
-//    @Override
-//    public List<RefrigeratorResponseDto> getAllRefrigerators(Long userId) {
-//        User user = userRepository.findById(userId)
-//                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
-//
-//        List<Refrigerator> refrigerators = refrigeratorRepository.findAllByUserId(userId);
-//        return refrigerators.stream()
-//                .map(r -> modelMapper.map(r, RefrigeratorResponseDto.class))
-//                .toList();
-//    }
+    @Override
+    public List<RefrigeratorResponseDto> getAllRefrigerators(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+
+        List<Refrigerator> refrigerators = user.getRefrigerators();
+        return refrigerators.stream()
+                .map(r -> modelMapper.map(r, RefrigeratorResponseDto.class))
+                .toList();
+    }
 
     @Override
-    public RefrigeratorResponseDto updateRefrigerator(Long refrigeratorId, RefrigeratorRequestDto refrigeratorRequestDto) {
+    public RefrigeratorResponseDto updateRefrigerator(Long userId, Long refrigeratorId, RefrigeratorRequestDto refrigeratorRequestDto) {
         Refrigerator refrigerator = refrigeratorRepository.findById(refrigeratorId).orElseThrow(() -> new ResourceNotFoundException("Refrigerator", "id", refrigeratorId));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
 
+        // Check user is one of the users of the fridge
+        if (!refrigerator.getUsers().contains(user)) {
+            throw new RuntimeException("User is not an owner of this fridge. Can't update fridge.");
+        }
         // Only update relevant fields - not users so users can't accidentally overwrite over it
         refrigerator.setFridgeName(refrigeratorRequestDto.getFridgeName());
 
         return modelMapper.map(refrigeratorRepository.save(refrigerator), RefrigeratorResponseDto.class);
     }
 
+    // TODO: Figure out where to implement this - request DTO doesn't currently take emails..
+    //  would need to be input via frontend
     @Override
-    public RefrigeratorResponseDto addUserToFridgeByEmail(Long fridgeId, String email) {
-        Refrigerator fridge = refrigeratorRepository.findById(fridgeId)
+    public RefrigeratorResponseDto addUserToFridgeByEmail(Long userId, Long fridgeId, String email) {
+        Refrigerator refrigerator = refrigeratorRepository.findById(fridgeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Refrigerator", "id", fridgeId));
 
-        User user = userRepository.findByEmail(email)
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+
+        User newUser = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
 
-        if (!fridge.getUsers().contains(user)) {
-            fridge.getUsers().add(user);
-            refrigeratorRepository.save(fridge);
+        if (refrigerator.getUsers().contains(user)) {
+            refrigerator.getUsers().add(newUser);
+            refrigeratorRepository.save(refrigerator);
         }
-        return modelMapper.map(fridge, RefrigeratorResponseDto.class);
+        return modelMapper.map(refrigerator, RefrigeratorResponseDto.class);
     }
 
     @Override
-    public RefrigeratorResponseDto removeUserFromFridgeByEmail(Long fridgeId, String email) {
-        Refrigerator fridge = refrigeratorRepository.findById(fridgeId)
+    public RefrigeratorResponseDto removeUserFromFridgeByEmail(Long userId, Long fridgeId, String email) {
+        Refrigerator refrigerator = refrigeratorRepository.findById(fridgeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Refrigerator", "id", fridgeId));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
 
-        User user = userRepository.findByEmail(email)
+        User userToRemove = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "email", email));
 
-        if (fridge.getUsers().contains(user)) {
-            fridge.getUsers().remove(user);
-            refrigeratorRepository.save(fridge);
+        if (refrigerator.getUsers().contains(user)) {
+            refrigerator.getUsers().remove(userToRemove);
+            refrigeratorRepository.save(refrigerator);
         }
 
-        return modelMapper.map(fridge, RefrigeratorResponseDto.class);
+        return modelMapper.map(refrigerator, RefrigeratorResponseDto.class);
     }
 
     @Override
-    public void deleteRefrigerator(Long refrigeratorId) {
+    public void deleteRefrigerator(Long userId, Long refrigeratorId) {
         Refrigerator refrigerator = refrigeratorRepository.findById(refrigeratorId)
                 .orElseThrow(() -> new ResourceNotFoundException("Refrigerator", "id", refrigeratorId));
-        refrigeratorRepository.delete(refrigerator);
+
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+        if (refrigerator.getUsers().contains(user)) {
+            refrigeratorRepository.delete(refrigerator);
+        }
     }
 
     // ==== ITEMS ====

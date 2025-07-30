@@ -8,13 +8,13 @@ import com.fridgy.app.dto.RefrigeratorResponseDto;
 import java.util.List;
 
 public interface IRefrigeratorService {
-    RefrigeratorResponseDto createRefrigerator(RefrigeratorRequestDto requestDto);
+    RefrigeratorResponseDto createRefrigerator(Long userId, RefrigeratorRequestDto requestDto);
     RefrigeratorResponseDto getRefrigeratorById(Long id);
-//    List<RefrigeratorResponseDto> getAllRefrigerators(Long userId);
-    RefrigeratorResponseDto updateRefrigerator(Long id, RefrigeratorRequestDto requestDto);
-    RefrigeratorResponseDto addUserToFridgeByEmail(Long fridgeId, String email);
-    RefrigeratorResponseDto removeUserFromFridgeByEmail(Long fridgeId, String email);
-    void deleteRefrigerator(Long id);
+    List<RefrigeratorResponseDto> getAllRefrigerators(Long userId);
+    RefrigeratorResponseDto updateRefrigerator(Long userId, Long id, RefrigeratorRequestDto requestDto);
+    RefrigeratorResponseDto addUserToFridgeByEmail(Long userId, Long fridgeId, String email);
+    RefrigeratorResponseDto removeUserFromFridgeByEmail(Long userId, Long fridgeId, String email);
+    void deleteRefrigerator(Long userId, Long id);
 
     // ==== ITEMS ====
     List<ItemResponseDto> getItemsByFridgeId(Long fridgeId);

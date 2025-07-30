@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -33,8 +34,8 @@ public class Refrigerator {
             joinColumns = @JoinColumn(name="refrigerator_id"),
             inverseJoinColumns = @JoinColumn(name="user_id")
     )
-    private List<User> users;
+    private List<User> users = new ArrayList<>();
 
     @OneToMany(mappedBy = "refrigerator")
-    private List<Item> items;
+    private List<Item> items = new ArrayList<>();
 }

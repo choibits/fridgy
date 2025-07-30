@@ -3,7 +3,6 @@ package com.fridgy.app.controller;
 import com.fridgy.app.dto.GroceryListRequestDto;
 import com.fridgy.app.dto.GroceryListResponseDto;
 import com.fridgy.app.service.GroceryListService;
-import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

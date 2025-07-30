@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -34,7 +35,7 @@ public class GroceryList {
             joinColumns = @JoinColumn(name="grocery_list_id"), // join grocery list id
             inverseJoinColumns = @JoinColumn(name="item_id") // on the other side item id
     )
-    private List<Item> items;
+    private List<Item> items = new ArrayList<>();
 
     @Column(nullable = false, unique = true, length = 100)
     private String listName;

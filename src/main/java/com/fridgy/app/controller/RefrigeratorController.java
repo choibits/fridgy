@@ -6,8 +6,11 @@ import com.fridgy.app.dto.RefrigeratorRequestDto;
 import com.fridgy.app.dto.RefrigeratorResponseDto;
 import com.fridgy.app.service.IItemService;
 import com.fridgy.app.service.IRefrigeratorService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,50 +28,60 @@ public class RefrigeratorController {
     private IItemService itemService;
 
     @PostMapping
-    public RefrigeratorResponseDto createRefrigerator(@Valid @RequestBody RefrigeratorRequestDto requestDto) {
-        return refrigeratorService.createRefrigerator(requestDto);
+    public ResponseEntity<RefrigeratorResponseDto> createRefrigerator(HttpServletRequest request,
+                                                                   @Valid @RequestBody RefrigeratorRequestDto requestDto) {
+        Long userId = (Long) request.getAttribute("userId");
+        return ResponseEntity.status(HttpStatus.CREATED).body(refrigeratorService.createRefrigerator(userId, requestDto));
     }
 
     @GetMapping("/{id}")
-    public RefrigeratorResponseDto getRefrigeratorById(@PathVariable Long id) {
-        return refrigeratorService.getRefrigeratorById(id);
+    public ResponseEntity<RefrigeratorResponseDto> getRefrigeratorById(@PathVariable Long id) {
+        return ResponseEntity.ok().body(refrigeratorService.getRefrigeratorById(id));
     }
 
-    // TODO: Implement this endpoint
-//    @GetMapping("/user/{userId}")
-//    public List<RefrigeratorResponseDto> getAllRefrigeratorsForUser(
-//            @PathVariable Long userId) {
-//        return refrigeratorService.getAllRefrigerators(userId);
-//    }
+    @GetMapping
+    public ResponseEntity<List<RefrigeratorResponseDto>> getAllRefrigeratorsByUserId(HttpServletRequest request) {
+        Long userId = (Long) request.getAttribute("userId");
+        return ResponseEntity.ok().body(refrigeratorService.getAllRefrigerators(userId));
+    }
 
     @PutMapping("/{id}")
-    public RefrigeratorResponseDto updateRefrigerator(
+    public ResponseEntity<RefrigeratorResponseDto> updateRefrigerator(
+            HttpServletRequest request,
             @PathVariable Long id,
             @Valid @RequestBody RefrigeratorRequestDto requestDto) {
-        return refrigeratorService.updateRefrigerator(id, requestDto);
+        Long userId = (Long) request.getAttribute("userId");
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(refrigeratorService.updateRefrigerator(userId, id, requestDto));
     }
 
     @PostMapping("/{id}/add-user")
     public ResponseEntity<RefrigeratorResponseDto> addUserToFridgeByEmail(
+            HttpServletRequest request,
             @PathVariable Long id,
             @RequestParam String email) {
-        RefrigeratorResponseDto responseDto = refrigeratorService.addUserToFridgeByEmail(id, email);
+        Long userId = (Long) request.getAttribute("userId");
+        RefrigeratorResponseDto responseDto = refrigeratorService.addUserToFridgeByEmail(userId, id, email);
         return ResponseEntity.ok().body(responseDto);
     }
 
     @DeleteMapping("/{id}/remove-user")
     public ResponseEntity<RefrigeratorResponseDto> removeUserFromFridgeByEmail(
+            HttpServletRequest request,
             @PathVariable Long id,
             @RequestParam String email) {
-        RefrigeratorResponseDto responseDto = refrigeratorService.removeUserFromFridgeByEmail(id, email);
-        return ResponseEntity.ok().body(responseDto);
+        Long userId = (Long) request.getAttribute("userId");
+        RefrigeratorResponseDto responseDto = refrigeratorService.removeUserFromFridgeByEmail(userId, id, email);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseDto);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteRefrigerator(@PathVariable Long id) {
-        refrigeratorService.deleteRefrigerator(id);
+    public ResponseEntity<?> deleteRefrigerator(HttpServletRequest request, @PathVariable Long id) {
+        Long userId = (Long) request.getAttribute("userId");
+        refrigeratorService.deleteRefrigerator(userId, id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    // TODO: Implement these endpoints if I need them
 //    // ==== ITEMS ====
 //    @GetMapping
 //    public ResponseEntity<List<ItemResponseDto>> getItemsInFridge(@PathVariable Long fridgeId) {

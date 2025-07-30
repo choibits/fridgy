@@ -14,8 +14,6 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class RefrigeratorRequestDto {
-    // allows multiple users to be added to a fridge
-    private List<Long> userIds;
 
     @NotBlank
     @Size(min = 1, max = 100)

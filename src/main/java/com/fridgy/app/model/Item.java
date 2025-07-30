@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -22,7 +23,7 @@ public class Item {
     private Long id;
 
     @ManyToMany(mappedBy="items") // other side will then create the join table
-    private List<GroceryList> groceryLists;
+    private List<GroceryList> groceryLists = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name="refrigerator_id")
