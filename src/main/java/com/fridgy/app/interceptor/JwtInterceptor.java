@@ -18,6 +18,11 @@ public class JwtInterceptor implements HandlerInterceptor {
     @Override
     // request intercepts the request, response intercepts the response, and Object is because it could be anything
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            response.setStatus(HttpServletResponse.SC_OK);
+            return true;
+        }
+
         // get the token from the request header
         String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) { // Bearer is a standardized portion of the header app still works without
