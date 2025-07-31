@@ -18,6 +18,15 @@ public class JwtInterceptor implements HandlerInterceptor {
     @Override
     // request intercepts the request, response intercepts the response, and Object is because it could be anything
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
+        // handle CORS preflight requests
+        // when your frontend makes a request to a diff origin (localhost8080)
+        // the browser automatically sends an OPTIONS request. This is called a CORS PREFLIGHT.
+        // The CORS preflight OPTIONS request doesn’t include the JWT token, because it’s just asking for permission.
+        //So if your interceptor doesn’t let the OPTIONS request through, the browser never even sends your real request (like GET /grocerylists).
+        // That’s why this line says:
+        //	•	If the method is OPTIONS, just return HTTP 200 OK
+        //	•	Don’t try to validate the JWT or reject the request
+        //Otherwise, your app would break every time your frontend makes a secure (cross-origin) request.
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             response.setStatus(HttpServletResponse.SC_OK);
             return true;
