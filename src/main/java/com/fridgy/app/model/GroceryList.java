@@ -37,7 +37,7 @@ public class GroceryList {
     )
     private List<Item> items = new ArrayList<>();
 
-    @Column(nullable = false, unique = true, length = 100)
+    @Column(nullable = false, length = 100)
     private String listName;
 
 }

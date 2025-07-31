@@ -1,7 +1,5 @@
 package com.fridgy.app.dto;
 
-import com.fridgy.app.model.Item;
-import com.fridgy.app.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,4 +14,5 @@ import java.util.List;
 public class GroceryListResponseDto {
     private Long id;
     private String listName;
+    private List<ItemResponseDto> items;
 }

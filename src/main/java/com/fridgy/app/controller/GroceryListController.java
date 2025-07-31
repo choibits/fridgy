@@ -2,7 +2,9 @@ package com.fridgy.app.controller;
 
 import com.fridgy.app.dto.GroceryListRequestDto;
 import com.fridgy.app.dto.GroceryListResponseDto;
+import com.fridgy.app.dto.ItemResponseDto;
 import com.fridgy.app.service.GroceryListService;
+import com.fridgy.app.service.IItemService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,11 @@ public class GroceryListController {
         return ResponseEntity.ok(groceryListService.getGroceryList(groceryListId));
     }
 
+    @GetMapping("/grocerylist/{groceryListId}/items")
+    public ResponseEntity<List<ItemResponseDto>> getItemsByGroceryListId(@PathVariable Long groceryListId) {
+        return ResponseEntity.ok(groceryListService.getItemsByGroceryListId(groceryListId));
+    }
+
     @GetMapping("/users/{userId}")
     ResponseEntity<List<GroceryListResponseDto>> getAllGroceryListsByUserId(@PathVariable Long userId) {
         return ResponseEntity.ok(groceryListService.getAllGroceryListsByUserId(userId));
@@ -51,5 +58,26 @@ public class GroceryListController {
     }
 
     // TODO: addItemToGroceryList and removeItemFromGroceryList - both of these will need the userId or HttpServletRequest
+    @PostMapping("/{groceryListId}/items/{itemId}")
+    ResponseEntity<GroceryListResponseDto> addItemToGroceryList(
+            HttpServletRequest request,
+            @PathVariable Long groceryListId,
+            @PathVariable Long itemId
+    ) {
+        Long userId = (Long) request.getAttribute("userId");
+        GroceryListResponseDto updatedList = groceryListService.addItemToGroceryList(userId, groceryListId, itemId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(updatedList);
+    }
+
+    @DeleteMapping("/{groceryListId}/items/{itemId}")
+    ResponseEntity<GroceryListResponseDto> removeItemFromGroceryList(
+            HttpServletRequest request,
+            @PathVariable Long groceryListId,
+            @PathVariable Long itemId
+    ) {
+        Long userId = (Long) request.getAttribute("userId");
+        GroceryListResponseDto updatedList = groceryListService.removeItemFromGroceryList(userId, groceryListId, itemId);
+        return ResponseEntity.ok(updatedList);
+    }
 
 }

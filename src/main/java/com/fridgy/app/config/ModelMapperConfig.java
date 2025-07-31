@@ -1,9 +1,7 @@
 package com.fridgy.app.config;
 
-import com.fridgy.app.dto.GroceryListRequestDto;
-import com.fridgy.app.dto.RefrigeratorRequestDto;
+import com.fridgy.app.dto.*;
 import com.fridgy.app.model.GroceryList;
-import com.fridgy.app.dto.ItemRequestDto;
 import com.fridgy.app.model.Item;
 import com.fridgy.app.model.Refrigerator;
 import org.modelmapper.ModelMapper;

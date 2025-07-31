@@ -25,6 +25,9 @@ public class DataSeeder implements CommandLineRunner {
     private JwtService jwtService;
 
     @Autowired
+    private ItemService itemService;
+
+    @Autowired
     private ProfileService profileService;
 
     // ==== Repositories ====
@@ -78,7 +81,7 @@ public class DataSeeder implements CommandLineRunner {
         GroceryListRequestDto groceryListUser1Dto = GroceryListRequestDto.builder()
                 .listName("Trader Joe's")
                 .build();
-        groceryListService.createGroceryList(savedUser1.getId(), groceryListUser1Dto);
+        GroceryListResponseDto savedGroceryList1 = groceryListService.createGroceryList(savedUser1.getId(), groceryListUser1Dto);
 
         GroceryListRequestDto groceryListUser2Dto = GroceryListRequestDto.builder()
                 .listName("Hmart")
@@ -107,10 +110,16 @@ public class DataSeeder implements CommandLineRunner {
                 .quantity(2)
                 .expirationDate(LocalDate.of(2025, 8, 10))
                 .build();
-        // Add to grocery list or refrigerator
-        // groceryListService.addItemToList(savedGroceryList.getId(), item1Dto);
-        // or
-        // refrigeratorService.addItemToFridge(savedFridge.getId(), item1Dto);
+        ItemResponseDto item1ResponseDto = itemService.createItem(item1Dto);
+        groceryListService.addItemToGroceryList(savedUser1.getId(), savedGroceryList1.getId(), item1ResponseDto.getId());
+
+        ItemRequestDto item2Dto = ItemRequestDto.builder()
+                .itemName("Eggs")
+                .quantity(12)
+                .expirationDate(LocalDate.of(2025, 8, 15))
+                .build();
+        ItemResponseDto item2ResponseDto = itemService.createItem(item2Dto);
+        groceryListService.addItemToGroceryList(savedUser1.getId(), savedGroceryList1.getId(), item2ResponseDto.getId());
 
     }
 }

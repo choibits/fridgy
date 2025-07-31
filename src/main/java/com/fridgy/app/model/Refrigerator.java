@@ -23,7 +23,7 @@ public class Refrigerator {
     @GeneratedValue(strategy= GenerationType.SEQUENCE)
     private Long id;
 
-    @Column(nullable = false, unique = true, length = 100)
+    @Column(nullable = false, length = 100)
     @NotBlank
     @Size(min=1, max=100)
     private String fridgeName;
