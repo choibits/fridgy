@@ -66,7 +66,7 @@ public class DataSeeder implements CommandLineRunner {
                 .password("Password123")
                 .build();
         AuthResponseDto savedUser1 = authService.signup(user1Dto);
-        System.out.println("User1 ID: " + savedUser1.getId()); // Add thi
+        System.out.println("User1 ID: " + savedUser1.getId());
 
         AuthRequestDto user2Dto = AuthRequestDto.builder()
                 .email("user2@example.com")
