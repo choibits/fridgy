@@ -84,6 +84,10 @@ public class GroceryListService implements IGroceryListService {
                 .orElseThrow(() -> new ResourceNotFoundException("GroceryList", "id", groceryListId));
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new ResourceNotFoundException("Item", "id", itemId));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+        if (!groceryList.getUser().getId().equals(userId)) {
+            throw new RuntimeException("The grocery list belongs to another user. Can't add item to it.");
+        }
 
         groceryList.getItems().add(item);
         GroceryList updatedGroceryList = groceryListRepository.save(groceryList);
@@ -97,6 +101,10 @@ public class GroceryListService implements IGroceryListService {
                 .orElseThrow(() -> new ResourceNotFoundException("GroceryList", "id", groceryListId));
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new ResourceNotFoundException("Item", "id", itemId));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+        if (!groceryList.getUser().getId().equals(userId)) {
+            throw new RuntimeException("The grocery list belongs to another user. Can't remove items from it.");
+        }
 
         groceryList.getItems().remove(item);
         GroceryList updatedGroceryList = groceryListRepository.save(groceryList);
