@@ -2,6 +2,7 @@ package com.fridgy.app.controller;
 
 import com.fridgy.app.dto.GroceryListRequestDto;
 import com.fridgy.app.dto.GroceryListResponseDto;
+import com.fridgy.app.dto.ItemRequestDto;
 import com.fridgy.app.dto.ItemResponseDto;
 import com.fridgy.app.service.GroceryListService;
 import com.fridgy.app.service.IItemService;
@@ -26,6 +27,17 @@ public class GroceryListController {
         Long userId = (Long) request.getAttribute("userId");
         GroceryListResponseDto responseDto = groceryListService.createGroceryList(userId, requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
+    }
+
+    @PostMapping("/{groceryListId}/items")
+    public ResponseEntity<ItemResponseDto> createItemForGroceryList(
+            HttpServletRequest request,
+            @PathVariable Long groceryListId,
+            @Valid @RequestBody ItemRequestDto itemRequestDto
+    ) {
+        Long userId = (Long) request.getAttribute("userId");
+        ItemResponseDto createdItem = groceryListService.createItemForGroceryList(userId, groceryListId, itemRequestDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdItem);
     }
 
     @GetMapping("/{groceryListId}")
@@ -57,7 +69,6 @@ public class GroceryListController {
         return ResponseEntity.noContent().build();
     }
 
-    // TODO: addItemToGroceryList and removeItemFromGroceryList - both of these will need the userId or HttpServletRequest
     @PostMapping("/{groceryListId}/items/{itemId}")
     ResponseEntity<GroceryListResponseDto> addItemToGroceryList(
             HttpServletRequest request,

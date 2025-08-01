@@ -2,6 +2,7 @@ package com.fridgy.app.service;
 
 import com.fridgy.app.dto.GroceryListRequestDto;
 import com.fridgy.app.dto.GroceryListResponseDto;
+import com.fridgy.app.dto.ItemRequestDto;
 import com.fridgy.app.dto.ItemResponseDto;
 import com.fridgy.app.exception.ResourceNotFoundException;
 import com.fridgy.app.model.GroceryList;
@@ -77,6 +78,28 @@ public class GroceryListService implements IGroceryListService {
         GroceryList updatedGroceryList = groceryListRepository.save(groceryList);
         return modelMapper.map(updatedGroceryList, GroceryListResponseDto.class);
     }
+
+    @Override
+    public ItemResponseDto createItemForGroceryList(Long userId, Long groceryListId, ItemRequestDto itemRequestDto) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+
+        GroceryList groceryList = groceryListRepository.findById(groceryListId)
+                .orElseThrow(() -> new ResourceNotFoundException("GroceryList", "id", groceryListId));
+
+        if (!groceryList.getUser().getId().equals(userId)) {
+            throw new RuntimeException("The grocery list belongs to another user. Can't add items to it.");
+        }
+
+        Item newItem = modelMapper.map(itemRequestDto, Item.class);
+        Item savedItem = itemRepository.save(newItem);
+
+        groceryList.getItems().add(savedItem);
+        groceryListRepository.save(groceryList);
+
+        return modelMapper.map(savedItem, ItemResponseDto.class);
+    }
+
 
     @Override
     public GroceryListResponseDto addItemToGroceryList(Long userId, Long groceryListId, Long itemId) {

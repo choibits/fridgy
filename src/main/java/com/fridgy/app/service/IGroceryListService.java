@@ -2,6 +2,7 @@ package com.fridgy.app.service;
 
 import com.fridgy.app.dto.GroceryListRequestDto;
 import com.fridgy.app.dto.GroceryListResponseDto;
+import com.fridgy.app.dto.ItemRequestDto;
 import com.fridgy.app.dto.ItemResponseDto;
 
 import java.util.List;
@@ -12,6 +13,7 @@ public interface IGroceryListService {
     List<GroceryListResponseDto> getAllGroceryListsByUserId(Long userId);
     List<ItemResponseDto> getItemsByGroceryListId(Long groceryListId);
     GroceryListResponseDto updateGroceryList(Long userId, Long groceryListId, GroceryListRequestDto requestDto);
+    ItemResponseDto createItemForGroceryList(Long userId, Long groceryListId, ItemRequestDto requestDto);
     GroceryListResponseDto addItemToGroceryList(Long userId, Long groceryListId, Long itemId);
     GroceryListResponseDto removeItemFromGroceryList(Long userId, Long groceryListId, Long itemId);
     void deleteGroceryList(Long userId, Long groceryListId);

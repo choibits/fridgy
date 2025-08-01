@@ -28,7 +28,7 @@ public class JwtInterceptor implements HandlerInterceptor {
         //	•	Don’t try to validate the JWT or reject the request
         //Otherwise, your app would break every time your frontend makes a secure (cross-origin) request.
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
-            response.setStatus(HttpServletResponse.SC_OK);
+//            response.setStatus(HttpServletResponse.SC_OK);
             return true;
         }
 
