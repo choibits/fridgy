@@ -15,4 +15,5 @@ import java.util.List;
 public class RefrigeratorResponseDto {
     private Long id;
     private String fridgeName;
+    private List<ItemResponseDto> items;
 }

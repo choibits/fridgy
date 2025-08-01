@@ -3,10 +3,8 @@ package com.fridgy.app.service;
 import com.fridgy.app.dto.ItemRequestDto;
 import com.fridgy.app.dto.ItemResponseDto;
 import com.fridgy.app.exception.ResourceNotFoundException;
-import com.fridgy.app.model.GroceryList;
 import com.fridgy.app.model.Item;
 import com.fridgy.app.model.Refrigerator;
-import com.fridgy.app.model.User;
 import com.fridgy.app.repository.GroceryListRepository;
 import com.fridgy.app.repository.ItemRepository;
 import com.fridgy.app.repository.RefrigeratorRepository;
@@ -100,20 +98,24 @@ public class ItemService implements IItemService {
 //        return modelMapper.map(item, ItemResponseDto.class);
 //    }
 //
-//    @Override
-//    public ItemResponseDto moveItemToFridge(Long itemId, Long fridgeId) {
-//        Item item = itemRepository.findById(itemId)
-//                .orElseThrow(() -> new ResourceNotFoundException("Item", "id", itemId));
-//
-//        Refrigerator fridge = refrigeratorRepository.findById(fridgeId)
-//                .orElseThrow(() -> new ResourceNotFoundException("Refrigerator", "id", fridgeId));
-//
-//        item.setBought(true);
-//        item.setRefrigerator(fridge);
-//
-//        itemRepository.save(item);
-//        return modelMapper.map(item, ItemResponseDto.class);
-//    }
+    @Override
+    public List<ItemResponseDto> moveItemsToFridge(List<Long> itemIds, Long fridgeId) {
+        Refrigerator fridge = refrigeratorRepository.findById(fridgeId)
+                .orElseThrow(() -> new ResourceNotFoundException("Refrigerator", "id", fridgeId));
+
+        List<Item> items = itemRepository.findAllById(itemIds);
+
+        items.forEach(item -> {
+            item.setBought(true);
+            item.setRefrigerator(fridge);
+        });
+
+        List<Item> savedItems = itemRepository.saveAll(items);
+        return savedItems.stream()
+                .map(item -> modelMapper.map(item, ItemResponseDto.class))
+                .toList();
+    }
+
 
     @Override
     public void deleteItem(Long itemId) {

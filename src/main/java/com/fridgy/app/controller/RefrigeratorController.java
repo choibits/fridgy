@@ -4,6 +4,7 @@ import com.fridgy.app.dto.ItemRequestDto;
 import com.fridgy.app.dto.ItemResponseDto;
 import com.fridgy.app.dto.RefrigeratorRequestDto;
 import com.fridgy.app.dto.RefrigeratorResponseDto;
+import com.fridgy.app.repository.ItemRepository;
 import com.fridgy.app.service.IItemService;
 import com.fridgy.app.service.IRefrigeratorService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,6 +27,9 @@ public class RefrigeratorController {
 
     @Autowired
     private IItemService itemService;
+
+    @Autowired
+    private ItemRepository itemRepository;
 
     @PostMapping
     public ResponseEntity<RefrigeratorResponseDto> createRefrigerator(HttpServletRequest request,
@@ -82,17 +86,18 @@ public class RefrigeratorController {
     }
 
     // TODO: Implement these endpoints if I need them
-//    // ==== ITEMS ====
+    // ==== ITEMS ====
 //    @GetMapping
 //    public ResponseEntity<List<ItemResponseDto>> getItemsInFridge(@PathVariable Long fridgeId) {
 //        return ResponseEntity.ok(itemService.getItems(fridgeId));
 //    }
-//
-//    @PostMapping
-//    public ResponseEntity<ItemResponseDto> addItemToFridge(@PathVariable Long fridgeId,
-//                                                           @Valid @RequestBody ItemRequestDto itemDto) {
-//        return ResponseEntity.ok(itemService.addItemToFridge(fridgeId, itemDto));
-//    }
+
+    @PostMapping("/{fridgeId}/items")
+    public ResponseEntity<List<ItemResponseDto>> addItemsToFridge(
+            @PathVariable Long fridgeId,
+            @RequestBody List<Long> itemIds) {  // Accept item IDs, not full DTOs
+        return ResponseEntity.ok(itemService.moveItemsToFridge(itemIds, fridgeId));
+    }
 //
 //    @PutMapping("/{itemId}")
 //    public ResponseEntity<ItemResponseDto> updateItemInFridge(@PathVariable Long fridgeId,

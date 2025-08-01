@@ -18,7 +18,7 @@ public interface IItemService {
 //
 //    ItemResponseDto removeItemFromGroceryList(Long itemId, Long groceryListId);
 //
-//    ItemResponseDto moveItemToFridge(Long itemId, Long fridgeId);
+    List<ItemResponseDto> moveItemsToFridge(List<Long> itemIds, Long fridgeId);
 
     void deleteItem(Long itemId);
 }
