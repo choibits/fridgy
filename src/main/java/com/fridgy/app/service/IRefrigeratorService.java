@@ -11,6 +11,7 @@ public interface IRefrigeratorService {
     RefrigeratorResponseDto createRefrigerator(Long userId, RefrigeratorRequestDto requestDto);
     RefrigeratorResponseDto getRefrigeratorById(Long id);
     List<RefrigeratorResponseDto> getAllRefrigerators(Long userId);
+    List<RefrigeratorResponseDto> getRefrigeratorsByUserId(Long userId);
     RefrigeratorResponseDto updateRefrigerator(Long userId, Long id, RefrigeratorRequestDto requestDto);
     RefrigeratorResponseDto addUserToFridgeByEmail(Long userId, Long fridgeId, String email);
     RefrigeratorResponseDto removeUserFromFridgeByEmail(Long userId, Long fridgeId, String email);

@@ -49,6 +49,11 @@ public class RefrigeratorController {
         return ResponseEntity.ok().body(refrigeratorService.getAllRefrigerators(userId));
     }
 
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<List<RefrigeratorResponseDto>> getRefrigeratorsByUserId(@PathVariable Long userId) {
+        return ResponseEntity.ok(refrigeratorService.getRefrigeratorsByUserId(userId));
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<RefrigeratorResponseDto> updateRefrigerator(
             HttpServletRequest request,

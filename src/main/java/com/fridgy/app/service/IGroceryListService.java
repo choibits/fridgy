@@ -10,7 +10,7 @@ import java.util.List;
 public interface IGroceryListService {
     GroceryListResponseDto createGroceryList(Long userId, GroceryListRequestDto requestDto);
     GroceryListResponseDto getGroceryList(Long groceryListId);
-    List<GroceryListResponseDto> getAllGroceryListsByUserId(Long userId);
+    List<GroceryListResponseDto> getGroceryListsByUserId(Long userId);
     List<ItemResponseDto> getItemsByGroceryListId(Long groceryListId);
     GroceryListResponseDto updateGroceryList(Long userId, Long groceryListId, GroceryListRequestDto requestDto);
     ItemResponseDto createItemForGroceryList(Long userId, Long groceryListId, ItemRequestDto requestDto);

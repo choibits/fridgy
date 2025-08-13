@@ -51,8 +51,8 @@ public class GroceryListController {
     }
 
     @GetMapping("/users/{userId}")
-    ResponseEntity<List<GroceryListResponseDto>> getAllGroceryListsByUserId(@PathVariable Long userId) {
-        return ResponseEntity.ok(groceryListService.getAllGroceryListsByUserId(userId));
+    ResponseEntity<List<GroceryListResponseDto>> getGroceryListsByUserId(@PathVariable Long userId) {
+        return ResponseEntity.ok(groceryListService.getGroceryListsByUserId(userId));
     }
 
     @PutMapping("/{groceryListId}")

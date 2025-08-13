@@ -66,6 +66,13 @@ public class RefrigeratorService implements IRefrigeratorService {
     }
 
     @Override
+    public List<RefrigeratorResponseDto> getRefrigeratorsByUserId(Long userId) {
+        userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+        List<Refrigerator> refrigerators = refrigeratorRepository.findByUsers_Id(userId);
+        return refrigerators.stream().map(refrigerator -> modelMapper.map(refrigerator, RefrigeratorResponseDto.class)).toList();
+    }
+
+    @Override
     public RefrigeratorResponseDto updateRefrigerator(Long userId, Long refrigeratorId, RefrigeratorRequestDto refrigeratorRequestDto) {
         Refrigerator refrigerator = refrigeratorRepository.findById(refrigeratorId).orElseThrow(() -> new ResourceNotFoundException("Refrigerator", "id", refrigeratorId));
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));

@@ -53,7 +53,7 @@ public class GroceryListService implements IGroceryListService {
     }
 
     @Override
-    public List<GroceryListResponseDto> getAllGroceryListsByUserId(Long userId) {
+    public List<GroceryListResponseDto> getGroceryListsByUserId(Long userId) {
         userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
         List<GroceryList> groceryLists = groceryListRepository.findAllByUserId(userId);
         return groceryLists.stream().map(groceryList -> modelMapper.map(groceryList, GroceryListResponseDto.class)).toList();

@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface RefrigeratorRepository extends JpaRepository<Refrigerator, Long> {
-    // Custom queries can be added here if needed
+    List<Refrigerator> findByUsers_Id(Long userId);
 }
