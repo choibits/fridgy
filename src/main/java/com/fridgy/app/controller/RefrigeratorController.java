@@ -114,11 +114,12 @@ public class RefrigeratorController {
         ItemResponseDto updatedItem = refrigeratorService.updateRefrigeratorItem(fridgeId, itemId, itemRequestDto);
         return ResponseEntity.ok(updatedItem);
     }
-//
-//    @DeleteMapping("/{itemId}")
-//    public ResponseEntity<Void> deleteItemFromFridge(@PathVariable Long fridgeId,
-//                                                     @PathVariable Long itemId) {
-//        itemService.deleteItemFromFridge(fridgeId, itemId);
-//        return ResponseEntity.noContent().build();
-//    }
+
+    @DeleteMapping("/{fridgeId}/items/{itemId}")
+    public ResponseEntity<Void> deleteItemFromFridge(HttpServletRequest request, @PathVariable Long fridgeId,
+                                                     @PathVariable Long itemId) {
+        Long userId = (Long) request.getAttribute("userId");
+        refrigeratorService.deleteItemFromFridge(fridgeId, itemId);
+        return ResponseEntity.noContent().build();
+    }
 }
