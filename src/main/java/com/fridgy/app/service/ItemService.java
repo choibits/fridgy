@@ -5,6 +5,7 @@ import com.fridgy.app.dto.ItemResponseDto;
 import com.fridgy.app.exception.ResourceNotFoundException;
 import com.fridgy.app.model.Item;
 import com.fridgy.app.model.Refrigerator;
+import com.fridgy.app.model.User;
 import com.fridgy.app.repository.GroceryListRepository;
 import com.fridgy.app.repository.ItemRepository;
 import com.fridgy.app.repository.RefrigeratorRepository;
@@ -58,7 +59,8 @@ public class ItemService implements IItemService {
     // item id makes it unique - you would update on items/{itemId}
 
     @Override
-    public ItemResponseDto updateItemById(Long itemId, ItemRequestDto itemRequestDto) {
+    public ItemResponseDto updateItemById(Long userId, Long itemId, ItemRequestDto itemRequestDto) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
         Item item = itemRepository.findById(itemId).orElseThrow(() -> new ResourceNotFoundException("Item", "id", itemId));
         // an item can belong to a grocery list OR a refrigerator, so you don't need to check those exist
         modelMapper.map(itemRequestDto, item);

@@ -30,16 +30,16 @@ public class ItemController {
         return ResponseEntity.ok(itemService.getItemById(id));
     }
 
-    // TODO: Not sure if I need this endpoint
     @GetMapping
     public ResponseEntity<List<ItemResponseDto>> getAllItems() {
         return ResponseEntity.ok(itemService.getAllItems());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ItemResponseDto> updateItem(@PathVariable Long id,
+    public ResponseEntity<ItemResponseDto> updateItem(HttpServletRequest request, @PathVariable Long itemId,
                                                       @Valid @RequestBody ItemRequestDto itemRequestDto) {
-        return ResponseEntity.accepted().body(itemService.updateItemById(id, itemRequestDto));
+        Long userId = (Long) request.getAttribute("userId");
+        return ResponseEntity.accepted().body(itemService.updateItemById(userId, itemId, itemRequestDto));
     }
 
     @DeleteMapping("/{id}")

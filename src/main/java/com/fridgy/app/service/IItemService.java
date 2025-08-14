@@ -12,7 +12,7 @@ public interface IItemService {
 
     List<ItemResponseDto> getAllItems();
 
-    ItemResponseDto updateItemById(Long itemId, ItemRequestDto itemRequestDto);
+    ItemResponseDto updateItemById(Long userId, Long itemId, ItemRequestDto itemRequestDto);
 
 //    ItemResponseDto addItemToGroceryList(Long itemId, Long groceryListId);
 //
