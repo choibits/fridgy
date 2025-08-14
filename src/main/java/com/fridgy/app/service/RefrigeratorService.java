@@ -158,26 +158,17 @@ public class RefrigeratorService implements IRefrigeratorService {
         return modelMapper.map(saved, ItemResponseDto.class);
     }
 
-    @Override
-    public ItemResponseDto updateItemInFridge(Long fridgeId, Long itemId, ItemRequestDto itemRequestDto) {
-        Refrigerator fridge = refrigeratorRepository.findById(fridgeId)
-                .orElseThrow(() -> new ResourceNotFoundException("Refrigerator", "id", fridgeId));
+    public ItemResponseDto updateRefrigeratorItem(Long fridgeId, Long itemId, ItemRequestDto itemRequestDto) {
 
-        Item item = itemRepository.findById(itemId)
-                .orElseThrow(() -> new ResourceNotFoundException("Item", "id", itemId));
-
-        if (!item.getRefrigerator().getId().equals(fridge.getId())) {
-            throw new IllegalArgumentException("Item does not belong to this fridge");
-        }
+        Refrigerator refrigerator = refrigeratorRepository.findById(fridgeId).orElseThrow(() -> new ResourceNotFoundException("Refrigerator", "id", fridgeId));
+        Item item = itemRepository.findById(itemId).orElseThrow(() -> new ResourceNotFoundException("Item", "id", itemId));
 
         item.setItemName(itemRequestDto.getItemName());
-        item.setExpirationDate(itemRequestDto.getExpirationDate());
         item.setQuantity(itemRequestDto.getQuantity());
-//       TODO: handle images url
-//        item.setImageUrl(itemRequestDto.getImageUrl());
+        item.setExpirationDate(itemRequestDto.getExpirationDate());
 
-        Item updated = itemRepository.save(item);
-        return modelMapper.map(updated, ItemResponseDto.class);
+        Item updatedItem = itemRepository.save(item);
+        return modelMapper.map(updatedItem, ItemResponseDto.class);
     }
 
     @Override

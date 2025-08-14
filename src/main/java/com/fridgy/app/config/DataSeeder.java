@@ -108,7 +108,7 @@ public class DataSeeder implements CommandLineRunner {
         ItemRequestDto item1Dto = ItemRequestDto.builder()
                 .itemName("Milk")
                 .quantity(2)
-                .expirationDate(LocalDate.of(2025, 8, 10))
+                .expirationDate(LocalDate.of(2025, 9, 10))
                 .build();
         ItemResponseDto item1ResponseDto = itemService.createItem(item1Dto);
         groceryListService.addItemToGroceryList(savedUser1.getId(), savedGroceryList1.getId(), item1ResponseDto.getId());
@@ -116,7 +116,7 @@ public class DataSeeder implements CommandLineRunner {
         ItemRequestDto item2Dto = ItemRequestDto.builder()
                 .itemName("Eggs")
                 .quantity(12)
-                .expirationDate(LocalDate.of(2025, 8, 15))
+                .expirationDate(LocalDate.of(2025, 9, 15))
                 .build();
         ItemResponseDto item2ResponseDto = itemService.createItem(item2Dto);
         groceryListService.addItemToGroceryList(savedUser1.getId(), savedGroceryList1.getId(), item2ResponseDto.getId());

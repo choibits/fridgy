@@ -103,13 +103,17 @@ public class RefrigeratorController {
             @RequestBody List<Long> itemIds) {  // Accept item IDs, not full DTOs
         return ResponseEntity.ok(itemService.moveItemsToFridge(itemIds, fridgeId));
     }
-//
-//    @PutMapping("/{itemId}")
-//    public ResponseEntity<ItemResponseDto> updateItemInFridge(@PathVariable Long fridgeId,
-//                                                              @PathVariable Long itemId,
-//                                                              @Valid @RequestBody ItemRequestDto itemDto) {
-//        return ResponseEntity.ok(itemService.updateItemInFridge(fridgeId, itemId, itemDto));
-//    }
+
+    @PutMapping("/{fridgeId}/items/{itemId}")
+    public ResponseEntity<ItemResponseDto> updateRefrigeratorItem(
+            HttpServletRequest request,
+            @PathVariable Long fridgeId,
+            @PathVariable Long itemId,
+            @Valid @RequestBody ItemRequestDto itemRequestDto) {
+        Long userId = (Long) request.getAttribute("userId");
+        ItemResponseDto updatedItem = refrigeratorService.updateRefrigeratorItem(fridgeId, itemId, itemRequestDto);
+        return ResponseEntity.ok(updatedItem);
+    }
 //
 //    @DeleteMapping("/{itemId}")
 //    public ResponseEntity<Void> deleteItemFromFridge(@PathVariable Long fridgeId,

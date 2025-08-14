@@ -62,6 +62,18 @@ public class GroceryListController {
         return ResponseEntity.accepted().body(groceryListService.updateGroceryList(userId, groceryListId, requestDto));
     }
 
+    @PutMapping("/{listId}/items/{itemId}")
+    public ResponseEntity<ItemResponseDto> updateGroceryListItem(
+            HttpServletRequest request,
+            @PathVariable Long listId,
+            @PathVariable Long itemId,
+            @Valid @RequestBody ItemRequestDto itemRequestDto) {
+        Long userId = (Long) request.getAttribute("userId");
+        ItemResponseDto updatedItem = groceryListService.updateGroceryListItem(
+                listId, itemId, itemRequestDto);
+        return ResponseEntity.ok(updatedItem);
+    }
+
     @DeleteMapping("/{groceryListId}")
     ResponseEntity<Void> deleteGroceryList(HttpServletRequest request, @PathVariable Long groceryListId) {
         Long userId = (Long) request.getAttribute("userId");

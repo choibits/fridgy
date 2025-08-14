@@ -20,6 +20,6 @@ public interface IRefrigeratorService {
     // ==== ITEMS ====
     List<ItemResponseDto> getItemsByFridgeId(Long fridgeId);
     ItemResponseDto addItemToFridge(Long fridgeId, ItemRequestDto itemDto);
-    ItemResponseDto updateItemInFridge(Long fridgeId, Long itemId, ItemRequestDto itemDto);
+    ItemResponseDto updateRefrigeratorItem(Long fridgeId, Long itemId, ItemRequestDto itemRequestDto);
     void deleteItemFromFridge(Long fridgeId, Long itemId);
 }

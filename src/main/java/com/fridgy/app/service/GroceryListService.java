@@ -100,6 +100,23 @@ public class GroceryListService implements IGroceryListService {
         return modelMapper.map(savedItem, ItemResponseDto.class);
     }
 
+    @Override
+    public ItemResponseDto updateGroceryListItem(Long listId, Long itemId, ItemRequestDto itemRequestDto) {
+
+        GroceryList groceryList = groceryListRepository.findById(listId)
+                .orElseThrow(() -> new ResourceNotFoundException("GroceryList", "id", listId));
+
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new ResourceNotFoundException("Item", "id", itemId));
+
+        item.setItemName(itemRequestDto.getItemName());
+        item.setQuantity(itemRequestDto.getQuantity());
+        item.setExpirationDate(itemRequestDto.getExpirationDate());
+
+        Item updatedItem = itemRepository.save(item);
+        return modelMapper.map(updatedItem, ItemResponseDto.class);
+    }
+
 
     @Override
     public GroceryListResponseDto addItemToGroceryList(Long userId, Long groceryListId, Long itemId) {
