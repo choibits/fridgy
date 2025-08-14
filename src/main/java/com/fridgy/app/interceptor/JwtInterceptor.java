@@ -1,0 +1,59 @@
+package com.fridgy.app.interceptor;
+
+import com.fridgy.app.service.JwtService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
+
+import java.io.IOException;
+
+@Component // needs to be a component because it's not a service, controller, or repository (it's a custom interceptor)
+public class JwtInterceptor implements HandlerInterceptor {
+
+    @Autowired
+    private JwtService jwtService;
+
+    @Override
+    // request intercepts the request, response intercepts the response, and Object is because it could be anything
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
+        // handle CORS preflight requests
+        // when your frontend makes a request to a diff origin (localhost8080)
+        // the browser automatically sends an OPTIONS request. This is called a CORS PREFLIGHT.
+        // The CORS preflight OPTIONS request doesn’t include the JWT token, because it’s just asking for permission.
+        //So if your interceptor doesn’t let the OPTIONS request through, the browser never even sends your real request (like GET /grocerylists).
+        // That’s why this line says:
+        //	•	If the method is OPTIONS, just return HTTP 200 OK
+        //	•	Don’t try to validate the JWT or reject the request
+        //Otherwise, your app would break every time your frontend makes a secure (cross-origin) request.
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+//            response.setStatus(HttpServletResponse.SC_OK);
+            return true;
+        }
+
+        // get the token from the request header
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) { // Bearer is a standardized portion of the header app still works without
+            // when making the request, need to add Header of Authorization, authorization as key, and Value as Bearer + token
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing or invalid Auth header");
+            return false;
+        }
+        // otherwise, if the authHeader is there
+        String token = authHeader.substring(7); // ignore the first seven characters (Bearer )
+        // eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNzUzODQzNjIxLCJleHAiOjE3NTM5MzAwMjF9.v5V-ShgL0pnwyNvUk3v6-VuaKIHAgeKWzOU2TnkHcJs
+
+        // validate the token
+        // if the token is invalid, return a 401 Unauthorized response
+        if (!jwtService.isTokenValid(token)) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid or expired token");
+            return false;
+        }
+        // if the token is valid, allow the request to proceed
+
+        //get the user id from the token to send back to any requests
+        request.setAttribute("userId", jwtService.getUserId(token));
+
+        return true;
+    }
+}
