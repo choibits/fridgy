@@ -37,9 +37,7 @@ public class GroceryListService implements IGroceryListService {
 
     @Override
     public GroceryListResponseDto createGroceryList(Long userId, GroceryListRequestDto requestDto) {
-        // Check if user exists
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
-
         GroceryList groceryList = modelMapper.map(requestDto, GroceryList.class);
         groceryList.setUser(user);
         GroceryList savedGroceryList = groceryListRepository.save(groceryList);
@@ -81,12 +79,9 @@ public class GroceryListService implements IGroceryListService {
 
     @Override
     public ItemResponseDto createItemForGroceryList(Long userId, Long groceryListId, ItemRequestDto itemRequestDto) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
-
+        userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
         GroceryList groceryList = groceryListRepository.findById(groceryListId)
                 .orElseThrow(() -> new ResourceNotFoundException("GroceryList", "id", groceryListId));
-
         if (!groceryList.getUser().getId().equals(userId)) {
             throw new RuntimeException("The grocery list belongs to another user. Can't add items to it.");
         }
@@ -102,9 +97,7 @@ public class GroceryListService implements IGroceryListService {
 
     @Override
     public ItemResponseDto updateGroceryListItem(Long listId, Long itemId, ItemRequestDto itemRequestDto) {
-
-        GroceryList groceryList = groceryListRepository.findById(listId)
-                .orElseThrow(() -> new ResourceNotFoundException("GroceryList", "id", listId));
+        groceryListRepository.findById(listId).orElseThrow(() -> new ResourceNotFoundException("GroceryList", "id", listId));
 
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new ResourceNotFoundException("Item", "id", itemId));
@@ -117,28 +110,9 @@ public class GroceryListService implements IGroceryListService {
         return modelMapper.map(updatedItem, ItemResponseDto.class);
     }
 
-
-    @Override
-    public GroceryListResponseDto addItemToGroceryList(Long userId, Long groceryListId, Long itemId) {
-        GroceryList groceryList = groceryListRepository.findById(groceryListId)
-                .orElseThrow(() -> new ResourceNotFoundException("GroceryList", "id", groceryListId));
-        Item item = itemRepository.findById(itemId)
-                .orElseThrow(() -> new ResourceNotFoundException("Item", "id", itemId));
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
-        if (!groceryList.getUser().getId().equals(userId)) {
-            throw new RuntimeException("The grocery list belongs to another user. Can't add item to it.");
-        }
-
-        groceryList.getItems().add(item);
-        GroceryList updatedGroceryList = groceryListRepository.save(groceryList);
-
-        return modelMapper.map(updatedGroceryList, GroceryListResponseDto.class);
-    }
-
     @Override
     public GroceryListResponseDto removeItemFromGroceryList(Long userId, Long groceryListId, Long itemId) {
-        GroceryList groceryList = groceryListRepository.findById(groceryListId)
-                .orElseThrow(() -> new ResourceNotFoundException("GroceryList", "id", groceryListId));
+        GroceryList groceryList = groceryListRepository.findById(groceryListId).orElseThrow(() -> new ResourceNotFoundException("GroceryList", "id", groceryListId));
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new ResourceNotFoundException("Item", "id", itemId));
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
@@ -155,7 +129,7 @@ public class GroceryListService implements IGroceryListService {
     @Override
     public void deleteGroceryList(Long userId, Long groceryListId) {
         GroceryList groceryList = groceryListRepository.findById(groceryListId).orElseThrow(() -> new ResourceNotFoundException("GroceryList", "id", groceryListId));
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+        userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
         if (!groceryList.getUser().getId().equals(userId)) {
             throw new RuntimeException("The grocery list belongs to another user. Can't delete it.");
         }

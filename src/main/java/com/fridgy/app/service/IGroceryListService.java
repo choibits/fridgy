@@ -15,7 +15,6 @@ public interface IGroceryListService {
     GroceryListResponseDto updateGroceryList(Long userId, Long groceryListId, GroceryListRequestDto requestDto);
     ItemResponseDto updateGroceryListItem(Long listId, Long itemId, ItemRequestDto itemRequestDto);
     ItemResponseDto createItemForGroceryList(Long userId, Long groceryListId, ItemRequestDto requestDto);
-    GroceryListResponseDto addItemToGroceryList(Long userId, Long groceryListId, Long itemId);
     GroceryListResponseDto removeItemFromGroceryList(Long userId, Long groceryListId, Long itemId);
     void deleteGroceryList(Long userId, Long groceryListId);
 
