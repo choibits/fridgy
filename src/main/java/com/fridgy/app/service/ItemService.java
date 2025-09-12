@@ -68,38 +68,6 @@ public class ItemService implements IItemService {
         return modelMapper.map(updatedItem, ItemResponseDto.class);
     }
 
-//    @Override
-//    public ItemResponseDto addItemToGroceryList(Long itemId, Long groceryListId) {
-//        Item item = itemRepository.findById(itemId)
-//                .orElseThrow(() -> new ResourceNotFoundException("Item", "id", itemId));
-//
-//        GroceryList list = groceryListRepository.findById(groceryListId)
-//                .orElseThrow(() -> new ResourceNotFoundException("GroceryList", "id", groceryListId));
-//
-//        item.getGroceryLists().add(list);
-//        list.getItems().add(item);
-//
-//        itemRepository.save(item);
-//        groceryListRepository.save(list);
-//
-//        return modelMapper.map(item, ItemResponseDto.class);
-//    }
-//
-//    @Override
-//    public ItemResponseDto removeItemFromGroceryList(Long itemId, Long groceryListId) {
-//        Item item = itemRepository.findById(itemId)
-//                .orElseThrow(() -> new ResourceNotFoundException("Item", "id", itemId));
-//
-//        GroceryList list = groceryListRepository.findById(groceryListId)
-//                .orElseThrow(() -> new ResourceNotFoundException("GroceryList", "id", groceryListId));
-//
-//        item.getGroceryLists().remove(list);
-//        list.getItems().remove(item);
-//        itemRepository.save(item);
-//        groceryListRepository.save(list);
-//        return modelMapper.map(item, ItemResponseDto.class);
-//    }
-//
     @Override
     public List<ItemResponseDto> moveItemsToFridge(List<Long> itemIds, Long fridgeId) {
         Refrigerator fridge = refrigeratorRepository.findById(fridgeId)

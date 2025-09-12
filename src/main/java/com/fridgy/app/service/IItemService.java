@@ -14,10 +14,6 @@ public interface IItemService {
 
     ItemResponseDto updateItemById(Long userId, Long itemId, ItemRequestDto itemRequestDto);
 
-//    ItemResponseDto addItemToGroceryList(Long itemId, Long groceryListId);
-//
-//    ItemResponseDto removeItemFromGroceryList(Long itemId, Long groceryListId);
-//
     List<ItemResponseDto> moveItemsToFridge(List<Long> itemIds, Long fridgeId);
 
     void deleteItem(Long itemId);
