@@ -134,9 +134,13 @@ public class GroceryListService implements IGroceryListService {
     @Override
     public void deleteGroceryList(Long userId, Long groceryListId) {
         GroceryList groceryList = groceryListRepository.findById(groceryListId).orElseThrow(() -> new ResourceNotFoundException("GroceryList", "id", groceryListId));
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
-        if (!groceryList.getUsers().contains(user)) {
+        User userToCheck = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+        if (!groceryList.getUsers().contains(userToCheck)) {
             throw new RuntimeException("The grocery list belongs to another user. Can't delete it.");
+        }
+        for (User user: groceryList.getUsers()) {
+            user.getGroceryLists().remove(groceryList);
+            userRepository.save(user);
         }
         itemRepository.deleteAll(groceryList.getItems());
         groceryListRepository.delete(groceryList);

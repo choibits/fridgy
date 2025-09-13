@@ -127,10 +127,15 @@ public class RefrigeratorService implements IRefrigeratorService {
         Refrigerator refrigerator = refrigeratorRepository.findById(refrigeratorId)
                 .orElseThrow(() -> new ResourceNotFoundException("Refrigerator", "id", refrigeratorId));
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
-        if (refrigerator.getUsers().contains(user)) {
-            refrigeratorRepository.delete(refrigerator);
+        User userToCheck = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+        if (!refrigerator.getUsers().contains(userToCheck)) {
+            throw new RuntimeException("User is not an owner of this fridge. Can't delete fridge.");
         }
+       for (User user: refrigerator.getUsers()) {
+           user.getRefrigerators().remove(refrigerator);
+           userRepository.save(user);
+       }
+        refrigeratorRepository.delete(refrigerator);
     }
 
     // ==== ITEMS ====
