@@ -22,8 +22,9 @@ public class Item {
     @GeneratedValue(strategy=GenerationType.SEQUENCE)
     private Long id;
 
-    @ManyToMany(mappedBy="items") // other side will then create the join table
-    private List<GroceryList> groceryLists = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "grocery_list_id")
+    private GroceryList groceryList;
 
     @ManyToOne
     @JoinColumn(name="refrigerator_id")

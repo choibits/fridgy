@@ -4,7 +4,6 @@ import com.fridgy.app.dto.ItemRequestDto;
 import com.fridgy.app.dto.ItemResponseDto;
 import com.fridgy.app.model.Item;
 import com.fridgy.app.model.User;
-import com.fridgy.app.repository.GroceryListRepository;
 import com.fridgy.app.repository.ItemRepository;
 import com.fridgy.app.repository.RefrigeratorRepository;
 import com.fridgy.app.repository.UserRepository;

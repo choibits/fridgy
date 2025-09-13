@@ -5,7 +5,6 @@ import com.fridgy.app.dto.GroceryListResponseDto;
 import com.fridgy.app.dto.ItemRequestDto;
 import com.fridgy.app.dto.ItemResponseDto;
 import com.fridgy.app.service.GroceryListService;
-import com.fridgy.app.service.IItemService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,17 +79,6 @@ public class GroceryListController {
         groceryListService.deleteGroceryList(userId, groceryListId);
         return ResponseEntity.noContent().build();
     }
-
-//    @PostMapping("/{groceryListId}/items/{itemId}")
-//    ResponseEntity<GroceryListResponseDto> addItemToGroceryList(
-//            HttpServletRequest request,
-//            @PathVariable Long groceryListId,
-//            @PathVariable Long itemId
-//    ) {
-//        Long userId = (Long) request.getAttribute("userId");
-//        GroceryListResponseDto updatedList = groceryListService.addItemToGroceryList(userId, groceryListId, itemId);
-//        return ResponseEntity.status(HttpStatus.CREATED).body(updatedList);
-//    }
 
     @DeleteMapping("/{groceryListId}/items/{itemId}")
     ResponseEntity<GroceryListResponseDto> removeItemFromGroceryList(

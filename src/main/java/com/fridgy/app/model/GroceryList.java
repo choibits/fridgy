@@ -29,12 +29,7 @@ public class GroceryList {
 
     // normally you would put the managed reference in the entity that has the mappedBy
     // since we're using dtos, we no longer need those
-    @ManyToMany
-    @JoinTable(
-            name="grocery_list_items",
-            joinColumns = @JoinColumn(name="grocery_list_id"), // join grocery list id
-            inverseJoinColumns = @JoinColumn(name="item_id") // on the other side item id
-    )
+    @OneToMany(mappedBy = "groceryList", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Item> items = new ArrayList<>();
 
     @Column(nullable = false, length = 100)

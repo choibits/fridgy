@@ -87,6 +87,7 @@ public class GroceryListService implements IGroceryListService {
         }
 
         Item newItem = modelMapper.map(itemRequestDto, Item.class);
+        newItem.setGroceryList(groceryList);
         Item savedItem = itemRepository.save(newItem);
 
         groceryList.getItems().add(savedItem);
@@ -97,7 +98,8 @@ public class GroceryListService implements IGroceryListService {
 
     @Override
     public ItemResponseDto updateGroceryListItem(Long listId, Long itemId, ItemRequestDto itemRequestDto) {
-        groceryListRepository.findById(listId).orElseThrow(() -> new ResourceNotFoundException("GroceryList", "id", listId));
+        groceryListRepository.findById(listId).orElseThrow(() -> new ResourceNotFoundException("GroceryList", "id",
+                listId));
 
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new ResourceNotFoundException("Item", "id", itemId));
@@ -115,15 +117,18 @@ public class GroceryListService implements IGroceryListService {
         GroceryList groceryList = groceryListRepository.findById(groceryListId).orElseThrow(() -> new ResourceNotFoundException("GroceryList", "id", groceryListId));
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new ResourceNotFoundException("Item", "id", itemId));
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+        userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
         if (!groceryList.getUser().getId().equals(userId)) {
             throw new RuntimeException("The grocery list belongs to another user. Can't remove items from it.");
         }
 
+        // Breaks the relationship from the owning side
+        // 	orphanRemoval = true → Hibernate will automatically delete items removed from the parent’s list
+        // 	(but only if the owning side is also updated, i.e., item.setGroceryList(null) happens).
         groceryList.getItems().remove(item);
-        GroceryList updatedGroceryList = groceryListRepository.save(groceryList);
+        itemRepository.delete(item);
 
-        return modelMapper.map(updatedGroceryList, GroceryListResponseDto.class);
+        return modelMapper.map(groceryList, GroceryListResponseDto.class);
     }
 
     @Override
@@ -133,6 +138,7 @@ public class GroceryListService implements IGroceryListService {
         if (!groceryList.getUser().getId().equals(userId)) {
             throw new RuntimeException("The grocery list belongs to another user. Can't delete it.");
         }
+        itemRepository.deleteAll(groceryList.getItems());
         groceryListRepository.delete(groceryList);
     }
 }
