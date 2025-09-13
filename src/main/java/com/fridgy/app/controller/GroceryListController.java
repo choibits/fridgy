@@ -81,16 +81,16 @@ public class GroceryListController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/{groceryListId}/items/{itemId}")
-    ResponseEntity<GroceryListResponseDto> addItemToGroceryList(
-            HttpServletRequest request,
-            @PathVariable Long groceryListId,
-            @PathVariable Long itemId
-    ) {
-        Long userId = (Long) request.getAttribute("userId");
-        GroceryListResponseDto updatedList = groceryListService.addItemToGroceryList(userId, groceryListId, itemId);
-        return ResponseEntity.status(HttpStatus.CREATED).body(updatedList);
-    }
+//    @PostMapping("/{groceryListId}/items/{itemId}")
+//    ResponseEntity<GroceryListResponseDto> addItemToGroceryList(
+//            HttpServletRequest request,
+//            @PathVariable Long groceryListId,
+//            @PathVariable Long itemId
+//    ) {
+//        Long userId = (Long) request.getAttribute("userId");
+//        GroceryListResponseDto updatedList = groceryListService.addItemToGroceryList(userId, groceryListId, itemId);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(updatedList);
+//    }
 
     @DeleteMapping("/{groceryListId}/items/{itemId}")
     ResponseEntity<GroceryListResponseDto> removeItemFromGroceryList(
