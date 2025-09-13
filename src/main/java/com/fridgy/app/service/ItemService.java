@@ -1,5 +1,4 @@
 package com.fridgy.app.service;
-
 import com.fridgy.app.dto.ItemRequestDto;
 import com.fridgy.app.dto.ItemResponseDto;
 import com.fridgy.app.exception.ResourceNotFoundException;
@@ -52,9 +51,20 @@ public class ItemService implements IItemService {
 
     @Override
     public ItemResponseDto updateItemById(Long userId, Long itemId, ItemRequestDto itemRequestDto) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
         Item item = itemRepository.findById(itemId).orElseThrow(() -> new ResourceNotFoundException("Item", "id", itemId));
-        // an item can belong to a grocery list OR a refrigerator, so you don't need to check those exist
+
+        if (item.getGroceryList() != null) {
+            if (!item.getGroceryList().getUser().getId().equals(userId)) {
+                throw new RuntimeException("This item belongs to another user's grocery list.");
+            }
+        } else if (item.getRefrigerator() != null) {
+            boolean hasAccess = item.getRefrigerator().getUsers().stream()
+                    .anyMatch(u -> u.getId().equals(userId));
+            if (!hasAccess) {
+                throw new RuntimeException("User doesn't have access to this refrigerator item.");
+            }
+        }
+
         modelMapper.map(itemRequestDto, item);
         Item updatedItem = itemRepository.save(item);
         return modelMapper.map(updatedItem, ItemResponseDto.class);
