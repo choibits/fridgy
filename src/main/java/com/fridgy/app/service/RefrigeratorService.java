@@ -12,12 +12,14 @@ import com.fridgy.app.model.User;
 import com.fridgy.app.repository.ItemRepository;
 import com.fridgy.app.repository.RefrigeratorRepository;
 import com.fridgy.app.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Transactional
 @Service
 public class RefrigeratorService implements IRefrigeratorService {
     @Autowired
@@ -36,14 +38,11 @@ public class RefrigeratorService implements IRefrigeratorService {
     public RefrigeratorResponseDto createRefrigerator(Long userId, RefrigeratorRequestDto dto) {
         // Check if user exists
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
-
         Refrigerator refrigerator = modelMapper.map(dto, Refrigerator.class);
-
-        List<User> users = refrigerator.getUsers();
-        users.add(user);
-        refrigerator.setUsers(users);
-
+        // User owns relationship of refrigerator, also you have to save the transient entity first
         Refrigerator savedRefrigerator = refrigeratorRepository.save(refrigerator);
+        user.getRefrigerators().add(savedRefrigerator);
+        userRepository.save(user);
         return modelMapper.map(savedRefrigerator, RefrigeratorResponseDto.class);
     }
 
