@@ -20,21 +20,23 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Entity
-//keyword user is reserved in postgres so you need to rename the table
+// keyword user is reserved in postgres so you need to rename the table
 @Table(name = "users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    // UUIDs look like this: 123e4567-e89b-12d3-a456-426614174000
 
     @OneToOne(mappedBy="user", cascade = CascadeType.REMOVE)
     private Profile profile;
 
-    // we could take this relationship out if we wanted to because if we did have many grocery lists
-    // we might not always want to return all the grocery lists everytime we fetch a user
-    @OneToMany
+    @ManyToMany
+    @JoinTable(
+            name = "user_grocery_list",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "grocery_list_id")
+    )
     private List<GroceryList> groceryLists = new ArrayList<>();
 
     @ManyToMany(mappedBy = "users")

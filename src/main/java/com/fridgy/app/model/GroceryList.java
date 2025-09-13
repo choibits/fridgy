@@ -22,13 +22,11 @@ public class GroceryList {
     @GeneratedValue(strategy= GenerationType.SEQUENCE)
     private Long id;
 
-    // can be bidirectional or unidirectional
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
     // normally you would put the managed reference in the entity that has the mappedBy
     // since we're using dtos, we no longer need those
+    @ManyToMany(mappedBy = "groceryLists")
+    private List<User> users = new ArrayList<>();
+
     @OneToMany(mappedBy = "groceryList", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Item> items = new ArrayList<>();
 
