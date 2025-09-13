@@ -52,9 +52,10 @@ public class ItemService implements IItemService {
     @Override
     public ItemResponseDto updateItemById(Long userId, Long itemId, ItemRequestDto itemRequestDto) {
         Item item = itemRepository.findById(itemId).orElseThrow(() -> new ResourceNotFoundException("Item", "id", itemId));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
 
         if (item.getGroceryList() != null) {
-            if (!item.getGroceryList().getUser().getId().equals(userId)) {
+            if (!item.getGroceryList().getUsers().contains(user)) {
                 throw new RuntimeException("This item belongs to another user's grocery list.");
             }
         } else if (item.getRefrigerator() != null) {

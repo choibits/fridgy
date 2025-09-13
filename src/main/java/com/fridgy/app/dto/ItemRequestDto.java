@@ -14,20 +14,20 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 public class ItemRequestDto {
-    // TODO: Not sure if I need these ids
-    private Long groceryListId;
-
-    private Long refrigeratorId;
+//    // TODO: Not sure if I need these ids
+//    private Long groceryListId;
+//
+//    private Long refrigeratorId;
 
     @NotBlank
     @Size(min = 1, max = 50)
     private String itemName;
 
-    @NotNull
+    @NotBlank
     @Min(0)
     private Integer quantity;
 
-    @NotNull(message = "Expiration date is required")
+    @NotBlank(message = "Expiration date is required")
     @FutureOrPresent(message = "Expiration date must be in the present or future")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate expirationDate;

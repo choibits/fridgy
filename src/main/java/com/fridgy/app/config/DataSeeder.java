@@ -69,7 +69,6 @@ public class DataSeeder implements CommandLineRunner {
                 .password("Password123")
                 .build();
         AuthResponseDto savedUser1 = authService.signup(user1Dto);
-        System.out.println("User1 ID: " + savedUser1.getId());
 
         AuthRequestDto user2Dto = AuthRequestDto.builder()
                 .email("user2@example.com")
@@ -86,12 +85,7 @@ public class DataSeeder implements CommandLineRunner {
         GroceryListRequestDto groceryListUser2Dto = GroceryListRequestDto.builder()
                 .listName("Hmart")
                 .build();
-        groceryListService.createGroceryList(savedUser2.getId(), groceryListUser2Dto);
-
-        GroceryListRequestDto groceryListUser2Dto2 = GroceryListRequestDto.builder()
-                .listName("Safeway")
-                .build();
-        groceryListService.createGroceryList(savedUser2.getId(), groceryListUser2Dto2);
+        GroceryListResponseDto savedGroceryList2 = groceryListService.createGroceryList(savedUser2.getId(), groceryListUser2Dto);
 
         // ==== REFRIGERATORS ====
         RefrigeratorRequestDto fridge1Dto = RefrigeratorRequestDto.builder()
@@ -108,18 +102,16 @@ public class DataSeeder implements CommandLineRunner {
         ItemRequestDto item1Dto = ItemRequestDto.builder()
                 .itemName("Milk")
                 .quantity(2)
-                .expirationDate(LocalDate.of(2025, 9, 10))
+                .expirationDate(LocalDate.of(2025, 12, 10))
                 .build();
-        ItemResponseDto item1ResponseDto = itemService.createItem(item1Dto);
         groceryListService.createItemForGroceryList(savedUser1.getId(), savedGroceryList1.getId(), item1Dto);
 
         ItemRequestDto item2Dto = ItemRequestDto.builder()
                 .itemName("Eggs")
                 .quantity(12)
-                .expirationDate(LocalDate.of(2025, 9, 15))
+                .expirationDate(LocalDate.of(2025, 12, 15))
                 .build();
-        ItemResponseDto item2ResponseDto = itemService.createItem(item2Dto);
-        groceryListService.createItemForGroceryList(savedUser1.getId(), savedGroceryList1.getId(), item2Dto);
+        groceryListService.createItemForGroceryList(savedUser2.getId(), savedGroceryList2.getId(), item2Dto);
 
     }
 }

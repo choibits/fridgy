@@ -28,14 +28,10 @@ public class Refrigerator {
     @Size(min=1, max=100)
     private String fridgeName;
 
-    @ManyToMany
-    @JoinTable(
-            name="refrigerator_users",
-            joinColumns = @JoinColumn(name="refrigerator_id"),
-            inverseJoinColumns = @JoinColumn(name="user_id")
-    )
+    @ManyToMany(mappedBy = "refrigerators")
     private List<User> users = new ArrayList<>();
 
+    // side with mappedBy is the inverse (non-owning) side of the relationship
     @OneToMany(mappedBy = "refrigerator")
     private List<Item> items = new ArrayList<>();
 }

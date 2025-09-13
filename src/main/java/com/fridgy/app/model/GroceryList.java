@@ -1,8 +1,6 @@
 package com.fridgy.app.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,6 +25,7 @@ public class GroceryList {
     @ManyToMany(mappedBy = "groceryLists")
     private List<User> users = new ArrayList<>();
 
+    // bidirectional - can fetch items from the grocerylist, and the grocery list from the items
     @OneToMany(mappedBy = "groceryList", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Item> items = new ArrayList<>();
 

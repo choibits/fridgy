@@ -39,7 +39,12 @@ public class User {
     )
     private List<GroceryList> groceryLists = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany
+    @JoinTable(
+            name = "user_refrigerator",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "refrigerator_id")
+    )
     private List<Refrigerator> refrigerators = new ArrayList<>();
 
     @Column(nullable = false, length = 100, unique = true)

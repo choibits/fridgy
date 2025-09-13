@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public interface GroceryListRepository extends JpaRepository<GroceryList, Long> {
-    List<GroceryList> findAllByUserId(Long userId);
+    List<GroceryList> findAllByUsers_Id(Long userId);
     @Query("SELECT g.items FROM GroceryList g WHERE g.id = :id")
     // id is grocery list id in this case
     List<Item> findItemsByGroceryListId(@Param("id") Long id);
