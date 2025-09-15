@@ -99,9 +99,11 @@ public class RefrigeratorController {
 
     @PostMapping("/{fridgeId}/items")
     public ResponseEntity<List<ItemResponseDto>> addItemsToFridge(
+            HttpServletRequest request,
             @PathVariable Long fridgeId,
             @RequestBody List<Long> itemIds) {  // Accept item IDs, not full DTOs
-        return ResponseEntity.ok(itemService.moveItemsToFridge(itemIds, fridgeId));
+        Long userId = (Long) request.getAttribute("userId");
+        return ResponseEntity.ok(itemService.moveItemsToFridge(userId, itemIds, fridgeId));
     }
 
     @PutMapping("/{fridgeId}/items/{itemId}")

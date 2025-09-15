@@ -72,11 +72,24 @@ public class ItemService implements IItemService {
     }
 
     @Override
-    public List<ItemResponseDto> moveItemsToFridge(List<Long> itemIds, Long fridgeId) {
+    public List<ItemResponseDto> moveItemsToFridge(Long userId, List<Long> itemIds, Long fridgeId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
         Refrigerator fridge = refrigeratorRepository.findById(fridgeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Refrigerator", "id", fridgeId));
 
+        // Check user has access to the target fridge
+        if (fridge.getUsers() == null || fridge.getUsers().stream().noneMatch(u -> u.getId().equals(userId))) {
+            throw new RuntimeException("User can't move items to a fridge they don't have access to.");
+        }
+        // Validate user can access the grocery list
         List<Item> items = itemRepository.findAllById(itemIds);
+        for (Item item : items) {
+            if (item.getGroceryList() != null &&
+                    !item.getGroceryList().getUsers().contains(user)) {
+                throw new RuntimeException("User can't move an item from another user's grocery list.");
+            }
+        }
 
         items.forEach(item -> {
             item.setBought(true);
